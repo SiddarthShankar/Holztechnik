@@ -1,0 +1,114 @@
+/* Merged main.css and dark.css */
+
+/* main.css */
+
+/* Set global font family and colors */
+body {
+    font-family: 'Arial', sans-serif; /* Replace with your desired font */
+    color: #000000; /* Default text color */
+    background-color: #064482; /* Background color */
+}
+
+/* Navbar styles */
+.navbar {
+    background-color: #343a40; /* Dark background for navbar */
+}
+
+.navbar .nav-link {
+    color: #cacaca; /* White color for navbar links */
+}
+
+.navbar .nav-link:hover {
+    color: #484848; /* Yellow color for hovered links */
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #007bff; /* Primary button color */
+    border-color: #007bff;
+    color: #cacaca;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3;
+}
+
+/* Alert styles */
+.alert {
+    font-size: 16px; /* Font size for alerts */
+}
+
+/* Header and footer styles */
+h1, h2, h3, h4, h5, h6 {
+    color: #cacaca; /* Dark color for headers */
+    font-family: 'Roboto', sans-serif; /* Font for headers */
+}
+
+/* Links styles */
+a {
+    color: #007bff; /* Blue color for links */
+}
+
+a:hover {
+    color: #484848; /* Darker blue on hover */
+}
+
+/* Additional global styles for other elements */
+.container {
+    padding-top: 20px;
+}
+
+
+/* Body styles from both files */
+body {
+    background-color: #484848; /* Dark background color from dark.css */
+    color: #cacaca; /* Text color from dark.css */
+}
+
+/* #Logo element (from main.css) */
+#Logo {
+}
+
+/* Background colors for specific elements (from main.css) */
+#total-orders {
+    background-color: #477b85b0;
+}
+
+#orders-delivered {
+    background-color: #477b85b0;
+}
+
+#orders-pending {
+    background-color: #477b85b0;
+}
+
+/* Box styling (from main.css) */
+.box {
+    border: 1px solid #cacaca;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+/* Navbar styling (from dark.css) */
+.navbar {
+    background-color: #343a40; /* Dark background for navbar */
+}
+
+/* Button styling (from dark.css) */
+.btn-outline-light {
+    border-color: #cacaca;
+    color: #cacaca;
+}
+
+.dark-theme table {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #444;
+}
+.dark-theme th, .dark-theme td {
+    padding: 10px;
+    border-bottom: 1px solid #555;
+}
+

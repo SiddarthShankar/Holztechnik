@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% if user.is_authenticated %}
+    <div class="col-md-6 offset-md-3">
+    <h1 class="text-center">Orders</h1>
+    <br/>
+    <div style="margin-top: 20px;">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Customer#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% if customers %}
+                {% for customer in customers %}
+                <tr>
+                    {{customer.customer_num}}</a>
+                    <td><a href="{% url 'customer' customer.id %}">{{customer.customer_id}}</a></td>
+                    <td>{{customer.name}}</td>
+                    <td>{{customer.created_at}}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+              <tr>
+              </tr>
+            </tbody>
+        </table>
+
+    {% else %}
+    <h1>Login</h1>
+    <br/>
+    
+    <form method="POST" action="{% url 'home' %}">
+        {% csrf_token %}
+        <form>
+            <div class="mb-3">
+                <label for="text" class="form-label">User Name</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            <br/>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    </form>
+    {% endif %}
+{% endblock %}

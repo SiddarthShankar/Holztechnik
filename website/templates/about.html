@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1 class="text-center">About</h1>
+<br/>
+<h2 style="color: rgb(4, 4, 7); font-size: 30px;">UI Design</h2>
+<div class="row">
+    <div class="col">
+        <div class="leftside">
+            <p> website is a part of the thesis work being carried out at Wien Work, in order to improve inclusive UI designs. The UI involves User Cenetered Design and is based on the Web Content Accessability Guideline and feedbacks from the workers.</p>
+        </div>
+    </div>
+    <div class="col">
+        <div class="rightside">
+            <img src="{% static 'Images/inclusivity.webp' %}" height="400" alt="Image 1">
+        </div>
+    </div>
+</div>
+{% endblock %}

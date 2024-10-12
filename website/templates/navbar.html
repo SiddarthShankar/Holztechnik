@@ -1,0 +1,43 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'Images/download.png' %}" height="50" alt="Home">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+            {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light me-2" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light me-2" href="{% url 'add_CustomerDetails' %}">Add Customer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light me-2" href="{% url 'about' %}">About</a>
+                    </li>
+                </ul>
+                <div class="d-flex ms-auto">
+                    <a href="{% url 'increase_font_size' %}" class="btn btn-outline-light me-2">A+</a>
+                    <a href="{% url 'decrease_font_size' %}" class="btn btn-outline-light me-4">A-</a>       
+                </div>
+                <div class="navbar-right">
+                    <div class="nav-item dropdown">
+                        <a class="btn btn-outline-light dropdown-toggle me-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span role="img" aria-label="Brightness" class="me-2">&#x1F506;</span> <!-- Brightness symbol -->
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'switch_theme' 'light' %}" class="btn btn-outline-dark">Light</a>
+                            <li><a class="dropdown-item" href="{% url 'switch_theme' 'dark' %}" class="btn btn-outline-dark">Dark</a>
+                        </ul>
+                    </div>
+            {% else %}
+            <li class="nav-item">
+                <a class="btn btn-outline-light me-2" href="{% url 'home' %}">Home</a>
+            </li>
+            {% endif %}
+    </div>
+</nav>
