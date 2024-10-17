@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
-from .models import Customer, Order
+from .models import Customer, Order, OrderSpecs
+from .filters import OrderFilter, CustomerFilter
+from django.utils import translation
 from .forms import *
 
 @csrf_exempt
@@ -11,9 +13,25 @@ from .forms import *
 def home(request):
     customers = Customer.objects.all()
     orders = Order.objects.all()
-    
-    context = {'customers':customers, 'orders':orders}
 
+    myFilters = CustomerFilter(request.GET, queryset=customers)
+    customers = myFilters.qs
+    
+    total_orders = orders.count()
+    delivered = orders.filter(status='Delivered').count()
+    pending = orders.filter(status='Pending').count()
+    
+    context = {'customers':customers, 'orders':orders, 'total_orders': total_orders, 'delivered': delivered, 'pending': pending, 'myFilters': myFilters}
+    
+    if request.method == 'GET' and 'order_id' in request.GET:
+        order_id = request.GET.get('order_id')
+        if order_id:
+            try:
+                order = Order.objects.get(id=order_id)
+                return redirect('order', pk=order.id)
+            except Order.DoesNotExist:
+                messages.error(request, _("Order not found!"))
+                
     # Check if logging in
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -68,17 +86,21 @@ def decrease_font_size(request):
 def switch_theme(request, theme_name):
     request.session['theme'] = theme_name
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
     
 def customer_record(request, pk):
     if request.user.is_authenticated:
-        customer_num = Customer.objects.get(id=pk)
+        customer = get_object_or_404(Customer, id=pk)
+        orders = customer.orders.all()  # Assuming 'orders' is a related name for customer orders
         context = {
-            'customer_num':customer_num,
+            'customer_num': customer,
+            'orders': orders
         }
         return render(request, 'customer.html', context)
     else:
-        messages.success(request, ("You must be logged into access the data"))
-        return redirect('home') 
+        messages.success(request, ("You must be logged in to access the data"))
+        return redirect('home')
 
 def delete_CustomerDetails(request, pk):
     if request.user.is_authenticated:
@@ -116,12 +138,21 @@ def update_CustomerDetails(request, pk):
         messages.success(request, ("You must be logged into access the data"))
         return redirect('home') 
 
-def order(request):
+def order(request, pk):
     if request.user.is_authenticated:
-        return render(request, 'order.html', {'order':order})
+        customer = get_object_or_404(Customer, id=pk)
+        orders = Order.objects.filter(customer=customer)
+        orderspecs = OrderSpecs.objects.filter(order__customer=customer)
+        
+        context = {
+            'customer_num': customer,
+            'orders': orders,
+            'orderspecs': orderspecs,
+        }
+        return render(request, 'order.html', context)
     else:
-        messages.success(request, ("You must be logged into access the data"))
-        return redirect('home') 
+        messages.error(request, "You must be logged in to access the data")
+        return redirect('home')
     
 def add_OrderDetails(request):
     order_form = AddOrderRecordForm(request.POST or None) 
@@ -135,4 +166,21 @@ def add_OrderDetails(request):
     else:
         messages.success(request, ("You must be logged in to add a form"))
         return redirect('home')
-     
+    
+def add_OrderSpecs(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            order_specs_form = AddOrderSpecsForm(request.POST)
+            if order_specs_form.is_valid():
+                order_specs_form.save()
+                messages.success(request, "Specifications added successfully!!...")
+                return redirect('/')
+        else:
+            order_specs_form = AddOrderSpecsForm()  # Initialize the form for GET requests
+        
+        return render(request, 'add_OrderSpecs.html', {'order_specs_form': order_specs_form})
+    else:
+        messages.success(request, "You must be logged in to add a form")
+        return redirect('home')
+
+ 

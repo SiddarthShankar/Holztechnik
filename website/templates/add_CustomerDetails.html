@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% block content %}
 
 <div class="col-md-6 offset-md-3">
-<h1 class="text-center">Add Customer Details</h1>
+<h1 class="text-center">{% trans "Add Customer Details" %}</h1>
 <br/>
 <form method="POST" action="{% url 'add_CustomerDetails' %}">
     {% csrf_token %}
     {{ customer_form.as_p }} <br/>
-    <button type="submit" class="btn btn-primary">Add Customer</button>
+    <button type="submit" class="btn btn-primary">{% trans "Add Customer" %}</button>
 </form>
 </div>
 

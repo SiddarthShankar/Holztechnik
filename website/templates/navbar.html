@@ -1,4 +1,8 @@
 {% load static %}
+{% load i18n %} 
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home' %}">
@@ -8,36 +12,69 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
             {% if user.is_authenticated %}
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="btn btn-outline-light me-2" href="{% url 'logout' %}">Logout</a>
+                        <a class="btn btn-outline-light me-2" href="{% url 'logout' %}">{% trans "Logout" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light me-2" href="{% url 'add_CustomerDetails' %}">Add Customer</a>
+                        <a class="btn btn-outline-light me-2" href="{% url 'add_CustomerDetails' %}">{% trans "Add Customer" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light me-2" href="{% url 'about' %}">About</a>
+                        <a class="btn btn-outline-light me-2" href="{% url 'about' %}">{% trans "About" %}</a>
                     </li>
                 </ul>
+
                 <div class="d-flex ms-auto">
                     <a href="{% url 'increase_font_size' %}" class="btn btn-outline-light me-2">A+</a>
                     <a href="{% url 'decrease_font_size' %}" class="btn btn-outline-light me-4">A-</a>       
                 </div>
-                <div class="navbar-right">
-                    <div class="nav-item dropdown">
-                        <a class="btn btn-outline-light dropdown-toggle me-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                <div class="navbar-right d-flex align-items-center">
+                    <!-- Brightness Dropdown -->
+                    <div class="nav-item dropdown me-2">
+                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <span role="img" aria-label="Brightness" class="me-2">&#x1F506;</span> <!-- Brightness symbol -->
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'switch_theme' 'light' %}" class="btn btn-outline-dark">Light</a>
-                            <li><a class="dropdown-item" href="{% url 'switch_theme' 'dark' %}" class="btn btn-outline-dark">Dark</a>
+                            <li><a class="dropdown-item" href="{% url 'switch_theme' 'light' %}" class="btn btn-outline-dark">{% trans "Light" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'switch_theme' 'dark' %}" class="btn btn-outline-dark">{% trans "Dark" %}</a></li>
                         </ul>
                     </div>
+                    <button id="speakButton" class="btn btn-outline-light me-2">{% trans "Speak" %}</button>
+                    <form class="language-form" id="languageForm" method="post" action="{% url 'set_language' %}">
+                        {% csrf_token %}
+                        <label class="language-label" for="language">Lang:</label>
+                        <select class="language-select" name="language" id="language" onchange="changeLanguage(this.value)">
+                            {% for lang_code, lang_name in LANGUAGES %}
+                                {% if lang_code == LANGUAGE_CODE %}
+                                    <option value="{{ lang_code }}" selected>{{ lang_name }}</option>
+                                {% else %}
+                                    <option value="{{ lang_code }}">{{ lang_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </form>
+
+                    <script>
+                        function changeLanguage(languageCode) {
+                            const form = document.getElementById('languageForm');
+                            form.elements.language.value = languageCode;
+                            form.submit();
+                        }
+                    </script>
+
+                    <!-- Search Order Form -->
+                    <form method="GET" action="{% url 'home' %}" class="d-flex">
+                        <input type="text" name="order_id" class="form-control me-2" placeholder="Search Order ID" style="max-width: 300px;">
+                        <button type="submit" class="btn btn-primary">{% trans "Search" %}</button>
+                    </form>
+                </div>
             {% else %}
             <li class="nav-item">
                 <a class="btn btn-outline-light me-2" href="{% url 'home' %}">Home</a>
             </li>
             {% endif %}
+        </div>
     </div>
 </nav>

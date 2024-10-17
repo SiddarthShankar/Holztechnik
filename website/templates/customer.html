@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load i18n %} 
 {% load static %}
 
 {% block content %}
-<h1 class="text-center">Customer Details</h1>
+<h1 class="text-center">{% trans "Customer Details" %}</h1>
 <br/>
 {% if user.is_authenticated %}
 <div class="card" style="width: 18rem;">
@@ -12,35 +13,38 @@
     </div>
 </div>
 <br/>
-<a href="{% url 'home' %}" class="btn btn-primary"> Home </a>
-<a href="{% url 'delete_CustomerDetails' customer_num.id %}" class="btn btn-danger"> Delete </a>
-<a href="{% url 'update_CustomerDetails' customer_num.id %}" class="btn btn-primary"> Update Record </a>
+<a href="{% url 'home' %}" class="btn btn-primary">{% trans "Home" %} </a>
+<a href="{% url 'delete_CustomerDetails' customer_num.id %}" class="btn btn-danger"> {% trans "Delete" %} </a>
+<a href="{% url 'update_CustomerDetails' customer_num.id %}" class="btn btn-secondary"> {% trans "Update Record" %} </a>
 <br/>
 <div style="margin-top: 20px;">
   <table class="table table-bordered table-hover">
       <thead class="table-dark">
         <tr>
-          <th scope="col">Order#</th>
-          <th scope="col">Description</th>
-          <th scope="col">Status</th>
+          <th scope="col">{% trans "Order#" %}</th>
+          <th scope="col">{% trans "Description" %}</th>
+          <th scope="col">{% trans "Status" %}</th>
         </tr>
       </thead>
       <tbody>
       {% if orders %}
           {% for order in orders %}
-            {{ order.description }}
           <tr>
-              <td>{{ order.order_id }}</td>
+              <td><a href="{% url 'order' order.id %}">{{order.order_id}}</a></td>
               <td>{{ order.description }}</td>
               <td>{{ order.status }}</td>
           </tr>
           {% endfor %}
+      {% else %}
+          <tr>
+              <td colspan="3">{% trans "No orders found for this customer." %}</td>
+          </tr>
       {% endif %}
       </tbody>
   </table>
-  <div class="text-center">
-    <a href="{% url 'add_OrderDetails' %}" class="btn btn-primary">Add Order Details</a>
+  <div class="d-flex justify-content-end">
+    <a href="{% url 'add_OrderDetails' %}" class="btn btn-primary">{% trans "Add Order" %}</a>
   </div>
-   <br/>
+<br/>
 {% endif %}
 {% endblock %}

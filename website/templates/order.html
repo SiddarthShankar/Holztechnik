@@ -1,6 +1,64 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load static %}
 
 {% block content %}
-<h1 class="text-center">Order</h1>
+<h1 class="text-center">{% trans "Order Specifications" %}</h1>
+<br/>
+{% if user.is_authenticated %}
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title"><strong>{{ customer_num.name }}</strong></h5>
+      {% if orders %}
+        {% for order in orders %}
+        <p class="card-text">
+          Order ID: {{ order.order_id }}<br/>
+          Status: {{ order.status }}<br/>
+        </p>
+        {% endfor %}
+      {% else %}
+        <p class="card-text">{% trans "No orders available for this customer." %}</p>
+      {% endif %}
+    </div>
+</div>
+<br/>
+<div style="margin-top: 20px;">
+  <table class="table table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">{% trans "Article" %}</th>
+          <th scope="col">{% trans "Pieces" %}</th>
+          <th scope="col">{% trans "Material" %}</th>
+          <th scope="col">{% trans "Length (Meters)" %}</th>
+          <th scope="col">{% trans "Breadth (Meters)" %}</th>
+          <th scope="col">{% trans "Thickness (Meters)" %}</th>
+          <th scope="col">{% trans "Quantity" %}</th>
+          <th scope="col">{% trans "Price per meter (Euros)" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% if orderspecs %}
+          {% for orderspec in orderspecs %}
+          <tr>
+              <td>{{ orderspec.article }}</td>
+              <td>{{ orderspec.pieces }}</td>
+              <td>{{ orderspec.material }}</td>
+              <td>{{ orderspec.length }}</td>
+              <td>{{ orderspec.breadth }}</td>
+              <td>{{ orderspec.thickness }}</td>
+              <td>{{ orderspec.quantity }}</td>
+              <td>{{ orderspec.pricePerMeter }}</td>
+          </tr>
+          {% endfor %}
+      {% else %}
+          <tr>
+              <td colspan="8" class="text-center">{% trans "No order specifications available for this customer." %}</td>
+          </tr>
+      {% endif %}
+      </tbody>
+  </table>
+<div class="d-flex justify-content-end">
+    <a href="{% url 'add_OrderSpecs' %}" class="btn btn-secondary">{% trans "Add Order Specs" %}</a>
+  </div>
+{% endif %}
 {% endblock %}

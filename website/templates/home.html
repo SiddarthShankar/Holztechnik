@@ -1,17 +1,24 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %} 
 {% block content %}
     {% if user.is_authenticated %}
-    <div class="col-md-6 offset-md-3">
-    <h1 class="text-center">Orders</h1>
+    <script src="{% static 'js/voice-prompts.js' %}" defer></script>
+    <div class="container-fluid">
+    <h1 class="text-center">{% trans "Customer Database" %}</h1>
     <br/>
+    {% include 'status.html' %}
+    <form method="get">
+      {{myFilters.form}}
+      <button class="btn btn-primary" type="submit">{% trans "Search" %}</button>
+    </form>
     <div style="margin-top: 20px;">
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover w-100">
             <thead class="table-dark">
               <tr>
-                <th scope="col">Customer#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Date</th>
+                <th scope="col">{% trans "Customer#" %}</th>
+                <th scope="col">{% trans "Name" %}</th>
+                <th scope="col">{% trans "Date" %}</th>
               </tr>
             </thead>
             <tbody>
@@ -31,6 +38,7 @@
         </table>
 
     {% else %}
+    <div class="col-md-6 offset-md-3">    
     <h1>Login</h1>
     <br/>
     
@@ -38,17 +46,17 @@
         {% csrf_token %}
         <form>
             <div class="mb-3">
-                <label for="text" class="form-label">User Name</label>
+                <label for="text" class="form-label">{% trans "User Name" %}</label>
                 <input type="text" class="form-control" id="username" name="username" required>
             </div>
 
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <label for="exampleInputPassword1" class="form-label">{% trans "Password" %}</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
 
             <br/>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
         </form>
     </div>
     </form>

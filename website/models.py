@@ -22,8 +22,26 @@ class Order(models.Model):
     )
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     created_at = models.DateTimeField(auto_now_add=True)
-    description = models.CharField(max_length=1000)
-    status = models.CharField(max_length=200, choices=STATUS)
-    
+    description = models.CharField(max_length=1000, default='Default description')
+    status = models.CharField(max_length=200, choices=STATUS, default='Pending') 
+
     def __str__(self):
-        return f"Order {self.id} for {self.customer.name}"
+        return f"Order {self.order_id} for {self.customer.name}"
+
+class OrderSpecs(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='orderspecs')
+    article = models.CharField(max_length=25)
+    pieces = models.IntegerField(default=1)  # whole number
+    material = models.CharField(max_length=50, default='default material')
+    length = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)  # decimal for measurements
+    breadth = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)
+    thickness = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)
+    quantity = models.IntegerField(default=1)  # whole number
+    pricePerMeter = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)  # decimal for currency
+
+    def __str__(self):
+        return f"Order {self.id} for {self.order.customer.name}"
+
+    def total_price(self):
+        # Example method to calculate the total price
+        return self.quantity * self.length * self.pricePerMeter

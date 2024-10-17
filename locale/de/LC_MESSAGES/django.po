@@ -1,0 +1,211 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-17 23:08+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: website/templates/about.html:6 website/templates/navbar.html:24
+msgid "About"
+msgstr "About"
+
+#: website/templates/about.html:8
+msgid "UI Design"
+msgstr "UI Design"
+
+#: website/templates/about.html:12
+msgid ""
+"The website is a part of the thesis work being carried out at Wien Work, in "
+"order to improve inclusive UI designs. The UI involves User Cenetered Design "
+"and is based on the Web Content Accessability Guideline and feedbacks from "
+"the workers. "
+msgstr ""
+"Die Website ist Teil der im Rahmen der Arbeit bei Wien Work durchgeführten "
+"Masterarbeit, um inklusive UI-Designs zu verbessern. Das UI basiert auf dem "
+"benutzerzentrierten Design und den Richtlinien für barrierefreie Webinhalte "
+"sowie auf Rückmeldungen von den Mitarbeitern."
+
+#: website/templates/add_CustomerDetails.html:7
+#: website/templates/update_CustomerDetails.html:7
+msgid "Add Customer Details"
+msgstr "Kundendetails hinzufügen"
+
+#: website/templates/add_CustomerDetails.html:12
+#: website/templates/navbar.html:21
+msgid "Add Customer"
+msgstr "Kunden hinzufügen"
+
+#: website/templates/add_OrderDetails.html:7
+#: website/templates/add_OrderDetails.html:12
+msgid "Add Order Details"
+msgstr "Bestellungsdetails hinzufügen"
+
+#: website/templates/add_OrderSpecs.html:7
+#: website/templates/add_OrderSpecs.html:12
+msgid "Add Order Specifications"
+msgstr "Bestellspezifikationen hinzufügen"
+
+#: website/templates/customer.html:6
+msgid "Customer Details"
+msgstr "Kundendetails"
+
+#: website/templates/customer.html:16
+msgid "Home"
+msgstr "Home"
+
+#: website/templates/customer.html:17
+msgid "Delete"
+msgstr "Löschen"
+
+#: website/templates/customer.html:18
+msgid "Update Record"
+msgstr "Datensatz aktualisieren"
+
+#: website/templates/customer.html:24
+msgid "Order#"
+msgstr "Bestellung#"
+
+#: website/templates/customer.html:25
+msgid "Description"
+msgstr "Beschreibung"
+
+#: website/templates/customer.html:26
+msgid "Status"
+msgstr "Status"
+
+#: website/templates/customer.html:40
+msgid "No orders found for this customer."
+msgstr "Für diesen Kunden wurden keine Bestellungen gefunden."
+
+#: website/templates/customer.html:46
+msgid "Add Order"
+msgstr "Bestellung hinzufügen"
+
+#: website/templates/home.html:8
+msgid "Customer Database"
+msgstr "Kundendatenbank"
+
+#: website/templates/home.html:13 website/templates/navbar.html:70
+msgid "Search"
+msgstr "Suchen"
+
+#: website/templates/home.html:19
+msgid "Customer#"
+msgstr "Kunden#"
+
+#: website/templates/home.html:20
+msgid "Name"
+msgstr "Name"
+
+#: website/templates/home.html:21
+msgid "Date"
+msgstr "Datum"
+
+#: website/templates/home.html:49
+msgid "User Name"
+msgstr "Benutzername"
+
+#: website/templates/home.html:54
+msgid "Password"
+msgstr "Passwort"
+
+#: website/templates/home.html:59
+msgid "Submit"
+msgstr "Einreichen"
+
+#: website/templates/navbar.html:18
+msgid "Logout"
+msgstr "Ausloggen"
+
+#: website/templates/navbar.html:40
+msgid "Light"
+msgstr "Licht"
+
+#: website/templates/navbar.html:41
+msgid "Dark"
+msgstr "Dunkel"
+
+#: website/templates/navbar.html:44
+msgid "Speak"
+msgstr "Sprecher"
+
+#: website/templates/order.html:6
+msgid "Order Specifications"
+msgstr "Bestellspezifikationen"
+
+#: website/templates/order.html:20
+msgid "No orders available for this customer."
+msgstr "Für diesen Kunden sind keine Bestellungen vorhanden."
+
+#: website/templates/order.html:29
+msgid "Article"
+msgstr "Artikel"
+
+#: website/templates/order.html:30
+msgid "Pieces"
+msgstr "Stücke"
+
+#: website/templates/order.html:31
+msgid "Material"
+msgstr "Material"
+
+#: website/templates/order.html:32
+msgid "Length (Meters)"
+msgstr "Länge (Meter)"
+
+#: website/templates/order.html:33
+msgid "Breadth (Meters)"
+msgstr "Breite (Meter)"
+
+#: website/templates/order.html:34
+msgid "Thickness (Meters)"
+msgstr "Dicke (Meter)"
+
+#: website/templates/order.html:35
+msgid "Quantity"
+msgstr "Menge"
+
+#: website/templates/order.html:36
+msgid "Price per meter (Euros)"
+msgstr "Preis pro Meter (Euro)"
+
+#: website/templates/order.html:55
+msgid "No order specifications available for this customer."
+msgstr "Für diesen Kunden sind keine Bestellspezifikationen verfügbar."
+
+#: website/templates/order.html:61
+msgid "Add Order Specs"
+msgstr "Bestellspezifikationen hinzufügen"
+
+#: website/templates/status.html:11
+msgid "Total Orders"
+msgstr "Bestellungen gesamt"
+
+#: website/templates/status.html:24
+msgid "Orders Delivered"
+msgstr "Ausgelieferte Bestellungen"
+
+#: website/templates/status.html:37
+msgid "Orders Pending"
+msgstr "Ausstehende Bestellungen"
+
+#: website/templates/update_CustomerDetails.html:12
+msgid "Update Customer Details"
+msgstr "Kundendetails aktualisieren"
+
+#: website/views.py:33
+msgid "Order not found!"
+msgstr "Bestellung nicht gefunden!"
