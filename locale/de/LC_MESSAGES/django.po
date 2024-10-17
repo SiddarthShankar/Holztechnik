@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-17 23:08+0200\n"
+"POT-Creation-Date: 2024-10-17 23:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,94 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: website/filters.py:8
+msgid "customer_id"
+msgstr "Kunden#"
+
+#: website/filters.py:8
+msgid "name"
+msgstr "name"
+
+#: website/filters.py:13
+#, fuzzy
+#| msgid "Status"
+msgid "status"
+msgstr "Status"
+
+#: website/forms.py:8
+#, fuzzy
+#| msgid "Customer Database"
+msgid "Customer Number"
+msgstr "Kundendatenbank"
+
+#: website/forms.py:9 website/templates/home.html:20
+msgid "Name"
+msgstr "Name"
+
+#: website/forms.py:10
+msgid "Email"
+msgstr "Email"
+
+#: website/forms.py:11
+msgid "Phone"
+msgstr "Handynummer"
+
+#: website/forms.py:12
+msgid "Address"
+msgstr "Addresse"
+
+#: website/forms.py:19
+msgid "Order Number"
+msgstr "Bestellung nummer"
+
+#: website/forms.py:20 website/templates/customer.html:26
+msgid "Status"
+msgstr "Status"
+
+#: website/forms.py:21 website/templates/customer.html:25
+msgid "Description"
+msgstr "Beschreibung"
+
+#: website/forms.py:35 website/templates/order.html:29
+msgid "Article"
+msgstr "Artikel"
+
+#: website/forms.py:36 website/templates/order.html:30
+msgid "Pieces"
+msgstr "Stücke"
+
+#: website/forms.py:37 website/templates/order.html:31
+msgid "Material"
+msgstr "Material"
+
+#: website/forms.py:38
+#, fuzzy
+#| msgid "Length (Meters)"
+msgid "Length (in meters)"
+msgstr "Länge (Meter)"
+
+#: website/forms.py:39
+#, fuzzy
+#| msgid "Breadth (Meters)"
+msgid "Breadth (in meters)"
+msgstr "Breite (Meter)"
+
+#: website/forms.py:40
+#, fuzzy
+#| msgid "Thickness (Meters)"
+msgid "Thickness (in meters)"
+msgstr "Dicke (Meter)"
+
+#: website/forms.py:41 website/templates/order.html:35
+msgid "Quantity"
+msgstr "Menge"
+
+#: website/forms.py:42
+#, fuzzy
+#| msgid "Price per meter (Euros)"
+msgid "Price Per Meter"
+msgstr "Preis pro Meter (Euro)"
 
 #: website/templates/about.html:6 website/templates/navbar.html:24
 msgid "About"
@@ -78,14 +166,6 @@ msgstr "Datensatz aktualisieren"
 msgid "Order#"
 msgstr "Bestellung#"
 
-#: website/templates/customer.html:25
-msgid "Description"
-msgstr "Beschreibung"
-
-#: website/templates/customer.html:26
-msgid "Status"
-msgstr "Status"
-
 #: website/templates/customer.html:40
 msgid "No orders found for this customer."
 msgstr "Für diesen Kunden wurden keine Bestellungen gefunden."
@@ -98,17 +178,13 @@ msgstr "Bestellung hinzufügen"
 msgid "Customer Database"
 msgstr "Kundendatenbank"
 
-#: website/templates/home.html:13 website/templates/navbar.html:70
+#: website/templates/home.html:13 website/templates/navbar.html:71
 msgid "Search"
 msgstr "Suchen"
 
 #: website/templates/home.html:19
 msgid "Customer#"
 msgstr "Kunden#"
-
-#: website/templates/home.html:20
-msgid "Name"
-msgstr "Name"
 
 #: website/templates/home.html:21
 msgid "Date"
@@ -150,18 +226,6 @@ msgstr "Bestellspezifikationen"
 msgid "No orders available for this customer."
 msgstr "Für diesen Kunden sind keine Bestellungen vorhanden."
 
-#: website/templates/order.html:29
-msgid "Article"
-msgstr "Artikel"
-
-#: website/templates/order.html:30
-msgid "Pieces"
-msgstr "Stücke"
-
-#: website/templates/order.html:31
-msgid "Material"
-msgstr "Material"
-
 #: website/templates/order.html:32
 msgid "Length (Meters)"
 msgstr "Länge (Meter)"
@@ -173,10 +237,6 @@ msgstr "Breite (Meter)"
 #: website/templates/order.html:34
 msgid "Thickness (Meters)"
 msgstr "Dicke (Meter)"
-
-#: website/templates/order.html:35
-msgid "Quantity"
-msgstr "Menge"
 
 #: website/templates/order.html:36
 msgid "Price per meter (Euros)"
@@ -209,3 +269,43 @@ msgstr "Kundendetails aktualisieren"
 #: website/views.py:33
 msgid "Order not found!"
 msgstr "Bestellung nicht gefunden!"
+
+#: website/views.py:44
+msgid "You have been successfully logged in!"
+msgstr "Sie wurden erfolgreich angemeldet!"
+
+#: website/views.py:51 website/views.py:54
+msgid "An error occurred, please try again!"
+msgstr "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!"
+
+#: website/views.py:64
+msgid "You have been successfully Logged Out!!...."
+msgstr "Sie wurden erfolgreich abgemeldet!!...."
+
+#: website/views.py:71 website/views.py:112 website/views.py:138
+msgid "You must be logged into access the data"
+msgstr "Sie müssen angemeldet sein, um auf die Daten zugreifen zu können"
+
+#: website/views.py:102 website/views.py:154
+msgid "You must be logged in to access the data"
+msgstr "Sie müssen eingeloggt sein um auf die Daten zugreifen zu können"
+
+#: website/views.py:109
+msgid "Details have been deleted successfully!!.."
+msgstr "Details wurden erfolgreich gelöscht!!"
+
+#: website/views.py:121 website/views.py:163
+msgid "Details added successfully!!..."
+msgstr "Details erfolgreich hinzugefügt!!..."
+
+#: website/views.py:125 website/views.py:167 website/views.py:183
+msgid "You must be logged in to add a form"
+msgstr "Sie müssen angemeldet sein, um ein Formular hinzuzufügen"
+
+#: website/views.py:134
+msgid "Details have been Updated successfully!!.."
+msgstr "Die Details wurden erfolgreich aktualisiert!!.."
+
+#: website/views.py:176
+msgid "Specifications added successfully!!..."
+msgstr "Spezifikationen erfolgreich hinzugefügt!!..."

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from .models import Customer, Order, OrderSpecs
 from .filters import OrderFilter, CustomerFilter
-from django.utils import translation
+from django.utils.translation import gettext as _
 from .forms import *
 
 @csrf_exempt
@@ -41,17 +41,17 @@ def home(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, "You have been successfully logged in!")     
+            messages.success(request, _("You have been successfully logged in!"))     
             # Redirect based on user type
             if user.username == 'Vorgesetzter':
                 return redirect('home')  # Redirect Vorgesetzter to home page
             elif user.username == 'Endfertigungteckniker':
                 return redirect('order')  # Redirect Endfertigungteckniker to order page
             else:
-                messages.error(request, "An error occurred, please try again!")
+                messages.error(request, _("An error occurred, please try again!"))
                 return redirect('home')
         else:
-            messages.error(request, "An error occurred, please try again!")
+            messages.error(request, _("An error occurred, please try again!"))
             return redirect('home')
     else:
         return render(request, 'home.html', context)
@@ -61,14 +61,14 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    messages.success(request, ("You have been successfully Logged Out!!...."))
+    messages.success(request, _("You have been successfully Logged Out!!...."))
     return redirect('home')
 
 def about(request):
     if request.user.is_authenticated:
         return render(request, 'about.html', {'about':about})
     else:
-        messages.success(request, ("You must be logged into access the data"))
+        messages.success(request, _("You must be logged into access the data"))
         return redirect('home') 
     
 def increase_font_size(request):
@@ -99,17 +99,17 @@ def customer_record(request, pk):
         }
         return render(request, 'customer.html', context)
     else:
-        messages.success(request, ("You must be logged in to access the data"))
+        messages.success(request, _("You must be logged in to access the data"))
         return redirect('home')
 
 def delete_CustomerDetails(request, pk):
     if request.user.is_authenticated:
         delete_detail = Customer.objects.get(id=pk)
         delete_detail.delete()
-        messages.success(request, "Details have been deleted successfully!!..")
+        messages.success(request, _("Details have been deleted successfully!!.."))
         return redirect('home') 
     else:
-        messages.success(request, "You must be logged into access the data")
+        messages.success(request, _("You must be logged into access the data"))
         return redirect('home') 
 
 def add_CustomerDetails(request):
@@ -118,11 +118,11 @@ def add_CustomerDetails(request):
         if request.method == "POST":
             if customer_form.is_valid():
                 add_CustomerDetails = customer_form.save()
-                messages.success(request, ("Details added successfully!!..."))
+                messages.success(request, _("Details added successfully!!..."))
                 return redirect('home')
         return render(request, 'add_CustomerDetails.html', {'customer_form':customer_form})
     else:
-        messages.success(request, ("You must be logged in to add a form"))
+        messages.success(request, _("You must be logged in to add a form"))
         return redirect('home')
      
 def update_CustomerDetails(request, pk):
@@ -131,11 +131,11 @@ def update_CustomerDetails(request, pk):
         customer_form = AddCustomerRecordForm(request.POST or None, instance=current_detail)
         if customer_form.is_valid():
             customer_form.save() 
-            messages.success(request, ("Details have been Updated successfully!!.."))
+            messages.success(request, _("Details have been Updated successfully!!.."))
             return redirect('home') 
         return render(request, 'update_CustomerDetails.html', {'customer_form':customer_form})
     else:
-        messages.success(request, ("You must be logged into access the data"))
+        messages.success(request, _("You must be logged into access the data"))
         return redirect('home') 
 
 def order(request, pk):
@@ -151,7 +151,7 @@ def order(request, pk):
         }
         return render(request, 'order.html', context)
     else:
-        messages.error(request, "You must be logged in to access the data")
+        messages.error(request, _("You must be logged in to access the data"))
         return redirect('home')
     
 def add_OrderDetails(request):
@@ -160,11 +160,11 @@ def add_OrderDetails(request):
         if request.method == "POST":
             if order_form.is_valid():
                 add_OrderDetails = order_form.save()
-                messages.success(request, ("Details added successfully!!..."))
+                messages.success(request, _("Details added successfully!!..."))
                 return redirect('/')
         return render(request, 'add_OrderDetails.html', {'order_form':order_form})
     else:
-        messages.success(request, ("You must be logged in to add a form"))
+        messages.success(request, _("You must be logged in to add a form"))
         return redirect('home')
     
 def add_OrderSpecs(request):
@@ -173,14 +173,14 @@ def add_OrderSpecs(request):
             order_specs_form = AddOrderSpecsForm(request.POST)
             if order_specs_form.is_valid():
                 order_specs_form.save()
-                messages.success(request, "Specifications added successfully!!...")
+                messages.success(request, _("Specifications added successfully!!..."))
                 return redirect('/')
         else:
             order_specs_form = AddOrderSpecsForm()  # Initialize the form for GET requests
         
         return render(request, 'add_OrderSpecs.html', {'order_specs_form': order_specs_form})
     else:
-        messages.success(request, "You must be logged in to add a form")
+        messages.success(request, _("You must be logged in to add a form"))
         return redirect('home')
 
  
