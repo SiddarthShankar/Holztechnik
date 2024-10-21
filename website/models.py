@@ -24,6 +24,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=1000, default='Default description')
     status = models.CharField(max_length=200, choices=STATUS, default='Pending') 
+    pdf_file = models.FileField(upload_to='pdfs/', null=True, blank=True)
 
     def __str__(self):
         return f"Order {self.order_id} for {self.customer.name}"
@@ -38,9 +39,6 @@ class OrderSpecs(models.Model):
     thickness = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)
     quantity = models.IntegerField(default=1)  # whole number
     pricePerMeter = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)  # decimal for currency
-
-    def __str__(self):
-        return f"Order {self.id} for {self.order.customer.name}"
 
     def total_price(self):
         # Example method to calculate the total price

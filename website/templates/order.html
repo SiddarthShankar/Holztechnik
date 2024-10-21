@@ -9,18 +9,21 @@
 <div class="card" style="width: 18rem;">
     <div class="card-body">
       <h5 class="card-title"><strong>{{ customer_num.name }}</strong></h5>
-      {% if orders %}
-        {% for order in orders %}
         <p class="card-text">
           Order ID: {{ order.order_id }}<br/>
           Status: {{ order.status }}<br/>
+          PDF: {% if order.pdf_file %}
+          <a href="{{ order.pdf_file.url }}" target="_blank">{% trans "2D drawing" %}</a><br/>
+        {% else %}
+          {% trans "No PDF available" %}
+        {% endif %}
         </p>
-        {% endfor %}
-      {% else %}
-        <p class="card-text">{% trans "No orders available for this customer." %}</p>
-      {% endif %}
     </div>
 </div>
+<br/>
+<a href="{% url 'home' %}" class="btn btn-primary">{% trans "Home" %} </a>
+<a href="{% url 'delete_OrderDetails' order.order_id %}" class="btn btn-danger"> {% trans "Delete" %} </a>
+<a href="{% url 'update_OrderDetails' order.order_id %}" class="btn btn-secondary"> {% trans "Update Record" %} </a>
 <br/>
 <div style="margin-top: 20px;">
   <table class="table table-bordered table-hover">
@@ -34,6 +37,7 @@
           <th scope="col">{% trans "Thickness (Meters)" %}</th>
           <th scope="col">{% trans "Quantity" %}</th>
           <th scope="col">{% trans "Price per meter (Euros)" %}</th>
+          <th scope="col">{% trans "update" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -48,6 +52,7 @@
               <td>{{ orderspec.thickness }}</td>
               <td>{{ orderspec.quantity }}</td>
               <td>{{ orderspec.pricePerMeter }}</td>
+              <td><a href="{% url 'update_OrderSpecs' orderspec.pk %}" class="btn btn-secondary ml-2">{% trans "Update Order Specification" %}</a></td>
           </tr>
           {% endfor %}
       {% else %}
@@ -57,8 +62,8 @@
       {% endif %}
       </tbody>
   </table>
-<div class="d-flex justify-content-end">
-    <a href="{% url 'add_OrderSpecs' %}" class="btn btn-secondary">{% trans "Add Order Specs" %}</a>
+  <div class="d-flex justify-content-end mt-3">
+    <a href="{% url 'add_OrderSpecs' %}" class="btn btn-primary me-2">{% trans "Add Order Specs" %}</a>
   </div>
 {% endif %}
 {% endblock %}

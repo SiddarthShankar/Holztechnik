@@ -24,6 +24,7 @@
           <th scope="col">{% trans "Order#" %}</th>
           <th scope="col">{% trans "Description" %}</th>
           <th scope="col">{% trans "Status" %}</th>
+          <th scope="col">{% trans "PDF" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -33,6 +34,7 @@
               <td><a href="{% url 'order' order.id %}">{{order.order_id}}</a></td>
               <td>{{ order.description }}</td>
               <td>{{ order.status }}</td>
+              <td><a href="{{ order.pdf_file.url }}">{% trans "2D drawing" %}</a></td>
           </tr>
           {% endfor %}
       {% else %}

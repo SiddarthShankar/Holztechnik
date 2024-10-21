@@ -19,10 +19,11 @@ class AddOrderRecordForm(forms.ModelForm):
     order_id = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": _("Order Number"), "class": "form-control"}), label="")
     status = forms.ChoiceField(choices=Order.STATUS, widget=forms.Select(attrs={"placeholder": _("Status"), "class": "form-control"}), label="")
     description = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": _("Description"), "class": "form-control"}), label="")
+    pdf_file = forms.FileField(required=False, widget=forms.FileInput(attrs={"class": "form-control"}), label=_("Upload PDF"))
     
     class Meta:
         model = Order
-        fields = ['order_id', 'status', 'description', 'customer',]
+        fields = ['order_id', 'status', 'description', 'customer', 'pdf_file']
     
     def __init__(self, *args, **kwargs):
         # Extract the customer from the passed arguments if it's present

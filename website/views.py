@@ -86,8 +86,6 @@ def decrease_font_size(request):
 def switch_theme(request, theme_name):
     request.session['theme'] = theme_name
     return redirect(request.META.get('HTTP_REFERER', '/'))
-
-
     
 def customer_record(request, pk):
     if request.user.is_authenticated:
@@ -138,15 +136,15 @@ def update_CustomerDetails(request, pk):
         messages.success(request, _("You must be logged into access the data"))
         return redirect('home') 
 
-def order(request, pk):
+def order(request, order_id):
     if request.user.is_authenticated:
-        customer = get_object_or_404(Customer, id=pk)
-        orders = Order.objects.filter(customer=customer)
-        orderspecs = OrderSpecs.objects.filter(order__customer=customer)
-        
+        # Get the specific order using the primary key (pk)
+        order = get_object_or_404(Order, pk=order_id)
+        # Filter the OrderSpecs based on the related order
+        orderspecs = order.orderspecs.all()
+        # orderspecs = OrderSpecs.objects.filter(order=order)
         context = {
-            'customer_num': customer,
-            'orders': orders,
+            'order': order,
             'orderspecs': orderspecs,
         }
         return render(request, 'order.html', context)
@@ -183,4 +181,38 @@ def add_OrderSpecs(request):
         messages.success(request, _("You must be logged in to add a form"))
         return redirect('home')
 
- 
+def delete_OrderDetails(request, pk):
+    if request.user.is_authenticated:
+        delete_detail = Order.objects.get(id=pk)
+        delete_detail.delete()
+        messages.success(request, _("Details have been deleted successfully!!.."))
+        return redirect('home') 
+    else:
+        messages.success(request, _("You must be logged into access the data"))
+        return redirect('home') 
+
+def update_OrderDetails(request, pk):
+    if request.user.is_authenticated:
+        current_detail = Order.objects.get(id=pk)
+        order_form = AddOrderRecordForm(request.POST or None, instance=current_detail)
+        if order_form.is_valid():
+            order_form.save() 
+            messages.success(request, _("Details have been Updated successfully!!.."))
+            return redirect('home') 
+        return render(request, 'update_OrderDetails.html', {'order_form':order_form})
+    else:
+        messages.success(request, _("You must be logged into access the data"))
+        return redirect('home') 
+    
+def update_OrderSpecs(request, pk):
+    if request.user.is_authenticated:
+        current_detail = OrderSpecs.objects.get(id=pk)
+        orderspecs_form = AddOrderSpecsForm(request.POST or None, instance=current_detail)
+        if orderspecs_form.is_valid():
+            orderspecs_form.save() 
+            messages.success(request, _("Details have been Updated successfully!!.."))
+            return redirect('home') 
+        return render(request, 'update_OrderSpecs.html', {'orderspecs_form':orderspecs_form})
+    else:
+        messages.success(request, _("You must be logged into access the data"))
+        return redirect('home') 

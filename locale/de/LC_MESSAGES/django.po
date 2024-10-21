@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-17 23:41+0200\n"
+"POT-Creation-Date: 2024-10-22 00:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr "Status"
 msgid "Customer Number"
 msgstr "Kundendatenbank"
 
-#: website/forms.py:9 website/templates/home.html:20
+#: website/forms.py:9 website/templates/home.html:21
 msgid "Name"
 msgstr "Name"
 
@@ -66,41 +66,45 @@ msgstr "Status"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: website/forms.py:35 website/templates/order.html:29
+#: website/forms.py:22
+msgid "Upload PDF"
+msgstr "PDF hochladen"
+
+#: website/forms.py:36 website/templates/order.html:32
 msgid "Article"
 msgstr "Artikel"
 
-#: website/forms.py:36 website/templates/order.html:30
+#: website/forms.py:37 website/templates/order.html:33
 msgid "Pieces"
 msgstr "Stücke"
 
-#: website/forms.py:37 website/templates/order.html:31
+#: website/forms.py:38 website/templates/order.html:34
 msgid "Material"
 msgstr "Material"
 
-#: website/forms.py:38
+#: website/forms.py:39
 #, fuzzy
 #| msgid "Length (Meters)"
 msgid "Length (in meters)"
 msgstr "Länge (Meter)"
 
-#: website/forms.py:39
+#: website/forms.py:40
 #, fuzzy
 #| msgid "Breadth (Meters)"
 msgid "Breadth (in meters)"
 msgstr "Breite (Meter)"
 
-#: website/forms.py:40
+#: website/forms.py:41
 #, fuzzy
 #| msgid "Thickness (Meters)"
 msgid "Thickness (in meters)"
 msgstr "Dicke (Meter)"
 
-#: website/forms.py:41 website/templates/order.html:35
+#: website/forms.py:42 website/templates/order.html:38
 msgid "Quantity"
 msgstr "Menge"
 
-#: website/forms.py:42
+#: website/forms.py:43
 #, fuzzy
 #| msgid "Price per meter (Euros)"
 msgid "Price Per Meter"
@@ -150,15 +154,15 @@ msgstr "Bestellspezifikationen hinzufügen"
 msgid "Customer Details"
 msgstr "Kundendetails"
 
-#: website/templates/customer.html:16
+#: website/templates/customer.html:16 website/templates/order.html:24
 msgid "Home"
 msgstr "Home"
 
-#: website/templates/customer.html:17
+#: website/templates/customer.html:17 website/templates/order.html:25
 msgid "Delete"
 msgstr "Löschen"
 
-#: website/templates/customer.html:18
+#: website/templates/customer.html:18 website/templates/order.html:26
 msgid "Update Record"
 msgstr "Datensatz aktualisieren"
 
@@ -166,11 +170,19 @@ msgstr "Datensatz aktualisieren"
 msgid "Order#"
 msgstr "Bestellung#"
 
-#: website/templates/customer.html:40
+#: website/templates/customer.html:27
+msgid "PDF"
+msgstr "PDF"
+
+#: website/templates/customer.html:37 website/templates/order.html:16
+msgid "2D drawing"
+msgstr "2D-Zeichnung"
+
+#: website/templates/customer.html:42
 msgid "No orders found for this customer."
 msgstr "Für diesen Kunden wurden keine Bestellungen gefunden."
 
-#: website/templates/customer.html:46
+#: website/templates/customer.html:48
 msgid "Add Order"
 msgstr "Bestellung hinzufügen"
 
@@ -182,23 +194,23 @@ msgstr "Kundendatenbank"
 msgid "Search"
 msgstr "Suchen"
 
-#: website/templates/home.html:19
+#: website/templates/home.html:20
 msgid "Customer#"
 msgstr "Kunden#"
 
-#: website/templates/home.html:21
+#: website/templates/home.html:22
 msgid "Date"
 msgstr "Datum"
 
-#: website/templates/home.html:49
+#: website/templates/home.html:50
 msgid "User Name"
 msgstr "Benutzername"
 
-#: website/templates/home.html:54
+#: website/templates/home.html:55
 msgid "Password"
 msgstr "Passwort"
 
-#: website/templates/home.html:59
+#: website/templates/home.html:60
 msgid "Submit"
 msgstr "Einreichen"
 
@@ -214,39 +226,45 @@ msgstr "Licht"
 msgid "Dark"
 msgstr "Dunkel"
 
-#: website/templates/navbar.html:44
-msgid "Speak"
-msgstr "Sprecher"
-
 #: website/templates/order.html:6
 msgid "Order Specifications"
 msgstr "Bestellspezifikationen"
 
-#: website/templates/order.html:20
-msgid "No orders available for this customer."
-msgstr "Für diesen Kunden sind keine Bestellungen vorhanden."
+#: website/templates/order.html:18
+msgid "No PDF available"
+msgstr "Kein PDF verfügbar"
 
-#: website/templates/order.html:32
+#: website/templates/order.html:35
 msgid "Length (Meters)"
 msgstr "Länge (Meter)"
 
-#: website/templates/order.html:33
+#: website/templates/order.html:36
 msgid "Breadth (Meters)"
 msgstr "Breite (Meter)"
 
-#: website/templates/order.html:34
+#: website/templates/order.html:37
 msgid "Thickness (Meters)"
 msgstr "Dicke (Meter)"
 
-#: website/templates/order.html:36
+#: website/templates/order.html:39
 msgid "Price per meter (Euros)"
 msgstr "Preis pro Meter (Euro)"
 
+#: website/templates/order.html:40
+msgid "update"
+msgstr ""
+
 #: website/templates/order.html:55
+#, fuzzy
+#| msgid "Add Order Specifications"
+msgid "Update Order Specification"
+msgstr "Bestellspezifikationen hinzufügen"
+
+#: website/templates/order.html:60
 msgid "No order specifications available for this customer."
 msgstr "Für diesen Kunden sind keine Bestellspezifikationen verfügbar."
 
-#: website/templates/order.html:61
+#: website/templates/order.html:66
 msgid "Add Order Specs"
 msgstr "Bestellspezifikationen hinzufügen"
 
@@ -266,6 +284,18 @@ msgstr "Ausstehende Bestellungen"
 msgid "Update Customer Details"
 msgstr "Kundendetails aktualisieren"
 
+#: website/templates/update_OrderDetails.html:7
+#: website/templates/update_OrderDetails.html:12
+msgid "Update Order Details"
+msgstr "Bestelldetails aktualisieren"
+
+#: website/templates/update_OrderSpecs.html:7
+#: website/templates/update_OrderSpecs.html:12
+#, fuzzy
+#| msgid "Add Order Specifications"
+msgid "Update Order Specifications"
+msgstr "Bestellspezifikationen hinzufügen"
+
 #: website/views.py:33
 msgid "Order not found!"
 msgstr "Bestellung nicht gefunden!"
@@ -282,30 +312,37 @@ msgstr "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!"
 msgid "You have been successfully Logged Out!!...."
 msgstr "Sie wurden erfolgreich abgemeldet!!...."
 
-#: website/views.py:71 website/views.py:112 website/views.py:138
+#: website/views.py:71 website/views.py:110 website/views.py:136
+#: website/views.py:191 website/views.py:204 website/views.py:217
 msgid "You must be logged into access the data"
 msgstr "Sie müssen angemeldet sein, um auf die Daten zugreifen zu können"
 
-#: website/views.py:102 website/views.py:154
+#: website/views.py:100 website/views.py:152
 msgid "You must be logged in to access the data"
 msgstr "Sie müssen eingeloggt sein um auf die Daten zugreifen zu können"
 
-#: website/views.py:109
+#: website/views.py:107 website/views.py:188
 msgid "Details have been deleted successfully!!.."
 msgstr "Details wurden erfolgreich gelöscht!!"
 
-#: website/views.py:121 website/views.py:163
+#: website/views.py:119 website/views.py:161
 msgid "Details added successfully!!..."
 msgstr "Details erfolgreich hinzugefügt!!..."
 
-#: website/views.py:125 website/views.py:167 website/views.py:183
+#: website/views.py:123 website/views.py:165 website/views.py:181
 msgid "You must be logged in to add a form"
 msgstr "Sie müssen angemeldet sein, um ein Formular hinzuzufügen"
 
-#: website/views.py:134
+#: website/views.py:132 website/views.py:200 website/views.py:213
 msgid "Details have been Updated successfully!!.."
 msgstr "Die Details wurden erfolgreich aktualisiert!!.."
 
-#: website/views.py:176
+#: website/views.py:174
 msgid "Specifications added successfully!!..."
 msgstr "Spezifikationen erfolgreich hinzugefügt!!..."
+
+#~ msgid "Speak"
+#~ msgstr "Sprecher"
+
+#~ msgid "No orders available for this customer."
+#~ msgstr "Für diesen Kunden sind keine Bestellungen vorhanden."

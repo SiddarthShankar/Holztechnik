@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<div class="col-md-6 offset-md-3">
+<h1 class="text-center">{% trans "Update Order Specifications" %}</h1>
+<br/>
+<form method="POST">
+    {% csrf_token %}
+    {{ orderspecs_form.as_p }} <br/>
+    <button type="submit" class="btn btn-primary">{% trans "Update Order Specifications" %}</button>
+</form>
+</div>
+
+{% endblock %}
