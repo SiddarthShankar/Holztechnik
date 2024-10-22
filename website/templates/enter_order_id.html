@@ -1,0 +1,14 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<form method="POST" action="{% url 'enter_order_id' %}">
+    {% csrf_token %}
+    <label for="order_id">{% trans "Please enter your Order ID:" %}</label>
+    <input type="text" name="order_id" id="order_id" required>
+    <button type="submit">{% trans "Submit" %}</button>
+</form>
+
+{% endblock %}

@@ -9,7 +9,6 @@ from .forms import *
 
 @csrf_exempt
 
-# Create your views here.
 def home(request):
     customers = Customer.objects.all()
     orders = Order.objects.all()
@@ -21,40 +20,30 @@ def home(request):
     delivered = orders.filter(status='Delivered').count()
     pending = orders.filter(status='Pending').count()
     
-    context = {'customers':customers, 'orders':orders, 'total_orders': total_orders, 'delivered': delivered, 'pending': pending, 'myFilters': myFilters}
-    
-    if request.method == 'GET' and 'order_id' in request.GET:
-        order_id = request.GET.get('order_id')
-        if order_id:
-            try:
-                order = Order.objects.get(id=order_id)
-                return redirect('order', pk=order.id)
-            except Order.DoesNotExist:
-                messages.error(request, _("Order not found!"))
+    context = {'customers': customers, 'orders': orders, 'total_orders': total_orders, 'delivered': delivered, 'pending': pending, 'myFilters': myFilters}
                 
     # Check if logging in
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
+
         # Authentication step
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+        print(user)
+        if user.username == "Vorgesetzter":
             login(request, user)
-            messages.success(request, _("You have been successfully logged in!"))     
-            # Redirect based on user type
-            if user.username == 'Vorgesetzter':
-                return redirect('home')  # Redirect Vorgesetzter to home page
-            elif user.username == 'Endfertigungteckniker':
-                return redirect('order')  # Redirect Endfertigungteckniker to order page
-            else:
-                messages.error(request, _("An error occurred, please try again!"))
-                return redirect('home')
+            messages.success(request, _("You have been successfully logged in!"))
+            return redirect('home')  # Redirect after successful login
+        elif user.username == "Endfertigungteckniker":
+            login(request, user)
+            messages.success(request, _("Please enter order_id..."))
+            return redirect('enter_order_id')
         else:
-            messages.error(request, _("An error occurred, please try again!"))
-            return redirect('home')
-    else:
-        return render(request, 'home.html', context)
+            messages.error(request, _("Invalid credentials, please try again."))
+            return render(request, 'home.html', context)
+        
+    # Render the page for GET requests
+    return render(request, 'home.html', context)
     
 def login_user(request):
     pass
@@ -66,7 +55,11 @@ def logout_user(request):
 
 def about(request):
     if request.user.is_authenticated:
-        return render(request, 'about.html', {'about':about})
+        if request.user.username == "Vorgesetzter":
+            return render(request, 'about.html', {'about':about})
+        else:
+            messages.error(request, _("Access denied!!"))
+            return redirect('enter_order_id')
     else:
         messages.success(request, _("You must be logged into access the data"))
         return redirect('home') 
@@ -113,12 +106,16 @@ def delete_CustomerDetails(request, pk):
 def add_CustomerDetails(request):
     customer_form = AddCustomerRecordForm(request.POST or None) 
     if request.user.is_authenticated:
-        if request.method == "POST":
-            if customer_form.is_valid():
-                add_CustomerDetails = customer_form.save()
-                messages.success(request, _("Details added successfully!!..."))
-                return redirect('home')
-        return render(request, 'add_CustomerDetails.html', {'customer_form':customer_form})
+        if request.user.username == "Vorgesetzter":
+            if request.method == "POST":
+                if customer_form.is_valid():
+                    add_CustomerDetails = customer_form.save()
+                    messages.success(request, _("Details added successfully!!..."))
+                    return redirect('home')
+            return render(request, 'add_CustomerDetails.html', {'customer_form':customer_form})
+        else:
+            messages.error(request, _("Access denied!!"))
+            return redirect('enter_order_id')
     else:
         messages.success(request, _("You must be logged in to add a form"))
         return redirect('home')
@@ -138,11 +135,8 @@ def update_CustomerDetails(request, pk):
 
 def order(request, order_id):
     if request.user.is_authenticated:
-        # Get the specific order using the primary key (pk)
         order = get_object_or_404(Order, pk=order_id)
-        # Filter the OrderSpecs based on the related order
         orderspecs = order.orderspecs.all()
-        # orderspecs = OrderSpecs.objects.filter(order=order)
         context = {
             'order': order,
             'orderspecs': orderspecs,
@@ -167,43 +161,54 @@ def add_OrderDetails(request):
     
 def add_OrderSpecs(request):
     if request.user.is_authenticated:
-        if request.method == "POST":
-            order_specs_form = AddOrderSpecsForm(request.POST)
-            if order_specs_form.is_valid():
-                order_specs_form.save()
-                messages.success(request, _("Specifications added successfully!!..."))
-                return redirect('/')
+        if request.user.username == "Vorgesetzter":
+            if request.method == "POST":
+                order_specs_form = AddOrderSpecsForm(request.POST)
+                if order_specs_form.is_valid():
+                    order_specs_form.save()
+                    messages.success(request, _("Specifications added successfully!!..."))
+                    return redirect('/')
+            else:
+                order_specs_form = AddOrderSpecsForm()  # Initialize the form for GET requests
+            return render(request, 'add_OrderSpecs.html', {'order_specs_form': order_specs_form})
         else:
-            order_specs_form = AddOrderSpecsForm()  # Initialize the form for GET requests
-        
-        return render(request, 'add_OrderSpecs.html', {'order_specs_form': order_specs_form})
+            messages.error(request, _("Access denied!!"))
+            return redirect('enter_order_id')
     else:
         messages.success(request, _("You must be logged in to add a form"))
         return redirect('home')
 
 def delete_OrderDetails(request, pk):
     if request.user.is_authenticated:
-        delete_detail = Order.objects.get(id=pk)
-        delete_detail.delete()
-        messages.success(request, _("Details have been deleted successfully!!.."))
-        return redirect('home') 
-    else:
-        messages.success(request, _("You must be logged into access the data"))
-        return redirect('home') 
-
-def update_OrderDetails(request, pk):
-    if request.user.is_authenticated:
-        current_detail = Order.objects.get(id=pk)
-        order_form = AddOrderRecordForm(request.POST or None, instance=current_detail)
-        if order_form.is_valid():
-            order_form.save() 
-            messages.success(request, _("Details have been Updated successfully!!.."))
+        if request.user.username == "Vorgesetzter":
+            delete_detail = Order.objects.get(id=pk)
+            delete_detail.delete()
+            messages.success(request, _("Details have been deleted successfully!!.."))
             return redirect('home') 
-        return render(request, 'update_OrderDetails.html', {'order_form':order_form})
+        else:
+            messages.error(request, _("Access denied!!"))
+            return redirect('enter_order_id')
     else:
         messages.success(request, _("You must be logged into access the data"))
         return redirect('home') 
     
+def update_OrderDetails(request, pk):
+    if request.user.is_authenticated:
+        if request.user.username == "Vorgesetzter":
+            current_detail = Order.objects.get(id=pk)
+            order_form = AddOrderRecordForm(request.POST or None, instance=current_detail)
+            if order_form.is_valid():
+                order_form.save() 
+                messages.success(request, _("Details have been Updated successfully!!.."))
+                return redirect('home') 
+            return render(request, 'update_OrderDetails.html', {'order_form':order_form})
+        else:
+            messages.error(request, _("Access denied!!"))
+            return redirect('enter_order_id')
+    else:
+        messages.success(request, _("You must be logged into access the data"))
+        return redirect('home') 
+      
 def update_OrderSpecs(request, pk):
     if request.user.is_authenticated:
         current_detail = OrderSpecs.objects.get(id=pk)
@@ -216,3 +221,20 @@ def update_OrderSpecs(request, pk):
     else:
         messages.success(request, _("You must be logged into access the data"))
         return redirect('home') 
+    
+def enter_order_id(request):
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+
+        if order_id:
+            try:
+                # Check if order_id exists and redirect to the relevant order page
+                order = Order.objects.get(id=order_id)
+                return redirect('order', order_id=order_id) # Assuming 'order_detail' is the URL name for the order page
+            except Order.DoesNotExist:
+                messages.error(request, _("Order ID does not exist."))
+                return redirect('enter_order_id')  # Reload the form if the order doesn't exist
+        else:
+            messages.error(request, _("Please enter a valid Order ID."))
+    
+    return render(request, 'enter_order_id.html')  # Render the form to enter order_id
