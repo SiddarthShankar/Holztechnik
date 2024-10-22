@@ -40,6 +40,10 @@ class OrderSpecs(models.Model):
     quantity = models.IntegerField(default=1)  # whole number
     pricePerMeter = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)  # decimal for currency
 
-    def total_price(self):
-        # Example method to calculate the total price
-        return self.quantity * self.length * self.pricePerMeter
+class Picking(models.Model):
+    order_spec = models.ForeignKey('OrderSpecs', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)  # The quantity to pick
+    item_to_pick = models.CharField(max_length=255)  # New field for the item to pick
+
+    def __str__(self):
+        return f"Picking for {self.order_spec.article} - {self.item_to_pick}, Quantity: {self.quantity}"

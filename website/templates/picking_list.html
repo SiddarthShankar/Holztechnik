@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+<h1 class="text-center">{% trans "Picking List for Order" %}</h1>
+<br/>
+
+<div style="margin-top: 20px;">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>{% trans "Article" %}</th>
+            <th>{% trans "Item to Pick" %}</th>
+            <th>{% trans "Quantity" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% if pickings %}
+            {% for picking in pickings %}
+            <tr>
+                <td>{{ picking.order_spec.article }}</td>
+                <td>{{ picking.item_to_pick }}</td>
+                <td>{{ picking.quantity }}</td>
+            </tr>
+            {% endfor %}
+        {% endif %}
+{% endblock %}

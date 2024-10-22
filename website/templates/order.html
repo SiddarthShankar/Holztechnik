@@ -64,5 +64,6 @@
   <div class="d-flex justify-content-end mt-3">
     <a href="{% url 'add_OrderSpecs' %}" class="btn btn-primary me-2">{% trans "Add Order Specs" %}</a>
   </div>
+  <a href="{% url 'picking_list' order.id %}" class="btn btn-primary">{% trans "View Picking List" %}</a>
 {% endif %}
 {% endblock %}

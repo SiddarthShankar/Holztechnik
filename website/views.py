@@ -228,13 +228,27 @@ def enter_order_id(request):
 
         if order_id:
             try:
-                # Check if order_id exists and redirect to the relevant order page
                 order = Order.objects.get(id=order_id)
-                return redirect('order', order_id=order_id) # Assuming 'order_detail' is the URL name for the order page
+                return redirect('order', order_id=order_id)
             except Order.DoesNotExist:
                 messages.error(request, _("Order ID does not exist."))
-                return redirect('enter_order_id')  # Reload the form if the order doesn't exist
+                return redirect('enter_order_id') 
         else:
             messages.error(request, _("Please enter a valid Order ID."))
-    
-    return render(request, 'enter_order_id.html')  # Render the form to enter order_id
+    return render(request, 'enter_order_id.html') 
+
+
+def picking_list(request, order_id):
+    if request.user.is_authenticated:
+        order = get_object_or_404(Order, pk=order_id)
+        pickings = Picking.objects.filter(order_spec__order=order)
+        
+        context = {
+            'order': order,
+            'pickings': pickings,
+        }
+
+        return render(request, 'picking_list.html', context)
+    else:
+        messages.error(request, _("You must be logged in to access the data"))
+        return redirect('home')
