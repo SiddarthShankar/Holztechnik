@@ -23,4 +23,6 @@ urlpatterns = [
     path('update_OrderSpecs/<int:pk>', views.update_OrderSpecs, name='update_OrderSpecs'),
     path('enter_order_id/', views.enter_order_id, name='enter_order_id'),
     path('pickings/<int:order_id>/', views.picking_list, name='picking_list'),
+    path('picking_iterator/<int:order_id>/', views.picking_iterator, name='picking_iterator'),
+    path('next-picking/', views.next_picking, name='next_picking'),
 ]

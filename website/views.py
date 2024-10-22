@@ -237,7 +237,6 @@ def enter_order_id(request):
             messages.error(request, _("Please enter a valid Order ID."))
     return render(request, 'enter_order_id.html') 
 
-
 def picking_list(request, order_id):
     if request.user.is_authenticated:
         order = get_object_or_404(Order, pk=order_id)
@@ -252,3 +251,56 @@ def picking_list(request, order_id):
     else:
         messages.error(request, _("You must be logged in to access the data"))
         return redirect('home')
+
+def picking_iterator(request, order_id):
+    # Get the order
+    order = get_object_or_404(Order, pk=order_id)
+
+    # Store the order_id in session for future use
+    request.session['order_id'] = order_id
+
+    # Initialize the picking list on the first load
+    if 'picking_list' not in request.session:
+        # Get the picking list and store it in the session
+        pickings = list(Picking.objects.filter(order_spec__order=order).values('order_spec__article', 'item_to_pick', 'quantity'))
+        request.session['picking_list'] = pickings
+        request.session['current_index'] = 0  # Start at the first item
+
+    # Get the current index and picking list from the session
+    current_index = request.session['current_index']
+    picking_list = request.session['picking_list']
+
+    # Check if we still have items to iterate
+    if current_index < len(picking_list):
+        current_picking = picking_list[current_index]
+        context = {
+            'order': order,
+            'picking': current_picking,
+            'last_item': current_index == len(picking_list) - 1  # Flag to check if it's the last item
+        }
+    else:
+        # Clear the session if the list is finished
+        request.session.pop('picking_list', None)
+        request.session.pop('current_index', None)
+        context = {
+            'order': order,
+            'finished': True,  # Flag to indicate the picking process is finished
+            'message': 'Picking List Completed'  # Message to show when finished
+        }
+
+    return render(request, 'picking_iterator.html', context)
+
+def next_picking(request):
+    # Increment the index for the next picking item
+    if 'current_index' in request.session:
+        request.session['current_index'] += 1
+
+    # Get the order_id from the session or request
+    order_id = request.session.get('order_id')
+    
+    # Ensure the order_id is available for redirection
+    if order_id:
+        return redirect('picking_iterator', order_id=order_id)
+    else:
+        # If no order_id is found in session, handle the error (optional)
+        return redirect('home')  # or any fallback page

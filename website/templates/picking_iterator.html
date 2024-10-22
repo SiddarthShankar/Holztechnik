@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+{% if not finished %}
+    <!-- Display the normal header for the picking process -->
+    <h1 class="text-center">{% trans "Picking for Order" %} #{{ order.id }}</h1>
+
+    <!-- Center and enlarge the picking details -->
+    <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
+        <div class="text-center">
+            <h2 class="lead display-4">{% trans "Article" %}: {{ picking.article }}</h2>
+            <p class="lead display-4">{% trans "Item to Pick" %}: {{ picking.item_to_pick }}</p>
+            <p class="lead display-4">{% trans "Quantity" %}: {{ picking.quantity }}</p>
+            <br/>
+            <div>
+                {% if not last_item %}
+                <a href="{% url 'next_picking' %}" class="btn btn-primary btn-lg">{% trans "Next" %}</a>
+                {% else %}
+                <!-- Redirect to the order details page when finished -->
+                <a href="{% url 'order' order.id %}" class="btn btn-success btn-lg">{% trans "Finish" %}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <!-- Special styled message for "Picking List Completed" -->
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="text-center">
+            <h1 class="display-1 font-weight-bold text-success">{% trans "Picking List Completed!" %}</h1>
+            <p class="lead text-muted">{% trans "You have finished all the items in this order." %}</p>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}
