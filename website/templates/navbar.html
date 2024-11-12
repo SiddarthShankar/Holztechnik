@@ -64,7 +64,8 @@
                             form.submit();
                         }
                     </script>
-
+                    <script src="{% static 'static/voice-prompts.js' %}"></script>
+                    <button id="speakButton" class="btn btn-outline-light me-2">Speak</button>
                     <!-- Search Order Form -->
                     <form method="GET" action="{% url 'home' %}" class="d-flex">
                         <input type="text" name="order_id" class="form-control me-2" placeholder="Search Order ID" style="max-width: 300px;">
