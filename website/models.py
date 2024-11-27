@@ -43,7 +43,8 @@ class OrderSpecs(models.Model):
 class Picking(models.Model):
     order_spec = models.ForeignKey('OrderSpecs', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)  # The quantity to pick
-    item_to_pick = models.CharField(max_length=255)  # New field for the item to pick
+    item_to_pick = models.CharField(max_length=255)  # The item to pick
+    article_id = models.CharField(max_length=10, unique=True, default="DEFAULT123")
 
     def __str__(self):
-        return f"Picking for {self.order_spec.article} - {self.item_to_pick}, Quantity: {self.quantity}"
+        return f"Picking for {self.order_spec.article} - {self.item_to_pick}, Quantity: {self.quantity}, Article ID: {self.article_id}"
