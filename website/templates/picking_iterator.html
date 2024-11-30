@@ -13,6 +13,11 @@
             <h2 class="lead display-4">{% trans "Article" %}: {{ picking.article }}</h2>
             <p class="lead display-4">{% trans "Item to Pick" %}: {{ picking.item_to_pick }}</p>
             <p class="lead display-4">{% trans "Quantity" %}: {{ picking.quantity }}</p>
+            {% if led_index is not None %}
+                <p class="lead display-4 text-success">{% trans "LED Index" %}: {{ led_index }}</p>
+            {% else %}
+                <p class="lead display-4 text-danger">{% trans "No LED Mapping Found" %}</p>
+            {% endif %}
             <br/>
             <div>
                 {% if not last_item %}

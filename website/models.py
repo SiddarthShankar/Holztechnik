@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 class Customer(models.Model):
@@ -44,7 +45,20 @@ class Picking(models.Model):
     order_spec = models.ForeignKey('OrderSpecs', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)  # The quantity to pick
     item_to_pick = models.CharField(max_length=255)  # The item to pick
-    article_id = models.CharField(max_length=10, unique=True, default="DEFAULT123")
-
+    article_id = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        unique=True
+    )
+    
     def __str__(self):
         return f"Picking for {self.order_spec.article} - {self.item_to_pick}, Quantity: {self.quantity}, Article ID: {self.article_id}"
+
+class LedMapping(models.Model):
+    led_index = models.PositiveIntegerField(unique=True)
+    article_id = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"LED {self.led_index} -> Article {self.article_id}"
+
+    class Meta:
+        db_table = "led_mapping"  # Explicitly set the table name

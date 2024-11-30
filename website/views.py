@@ -6,6 +6,7 @@ from .models import Customer, Order, OrderSpecs
 from .filters import OrderFilter, CustomerFilter
 from django.utils.translation import gettext as _
 from .forms import *
+import subprocess
 
 @csrf_exempt
 
@@ -262,21 +263,42 @@ def picking_iterator(request, order_id):
     # Initialize the picking list on the first load
     if 'picking_list' not in request.session:
         # Get the picking list and store it in the session
-        pickings = list(Picking.objects.filter(order_spec__order=order).values('order_spec__article', 'item_to_pick', 'quantity'))
+        pickings = list(Picking.objects.filter(order_spec__order=order).values('article_id','order_spec__article', 'item_to_pick', 'quantity'))
+
         request.session['picking_list'] = pickings
         request.session['current_index'] = 0  # Start at the first item
 
     # Get the current index and picking list from the session
     current_index = request.session['current_index']
     picking_list = request.session['picking_list']
+    
 
     # Check if we still have items to iterate
     if current_index < len(picking_list):
         current_picking = picking_list[current_index]
+
+        article_id = int(current_picking['article_id'])
+        print('article_id (casted):', article_id)
+        
+        led_mapping = LedMapping.objects.filter(article_id=article_id)
+        print('Generated SQL:', led_mapping.query)
+        
+        led_mapping = led_mapping.first()
+        print('LedMapping object:', led_mapping)
+        
+        led_index = led_mapping.led_index if led_mapping else None
+
+        if led_index is not None:
+            try:
+                subprocess.run(['python3', '/home/siddarthshankar/Desktop/led_control.py', str(led_index)], check=True)
+            except Exception as e:
+                print(f"Failed to light up LED {led_index} for article {article_id}: {e}")
+
         context = {
             'order': order,
             'picking': current_picking,
-            'last_item': current_index == len(picking_list) - 1  # Flag to check if it's the last item
+            'last_item': current_index == len(picking_list) - 1,
+            'led_index': led_index,# Flag to check if it's the last item
         }
     else:
         # Clear the session if the list is finished
