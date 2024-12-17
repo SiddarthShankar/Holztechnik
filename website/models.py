@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class Customer(models.Model):
@@ -31,6 +33,8 @@ class Order(models.Model):
         return f"Order {self.order_id} for {self.customer.name}"
 
 class OrderSpecs(models.Model):
+    id = models.BigAutoField(primary_key=True)  # Primary key
+    order_spec_id = models.CharField(max_length=5, default='00000', unique=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='orderspecs')
     article = models.CharField(max_length=25)
     pieces = models.IntegerField(default=1)  # whole number
@@ -42,17 +46,21 @@ class OrderSpecs(models.Model):
     pricePerMeter = models.DecimalField(max_digits=10, decimal_places=2, default=1.00)  # decimal for currency
 
 class Picking(models.Model):
-    order_spec = models.ForeignKey('OrderSpecs', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)  # The quantity to pick
     item_to_pick = models.CharField(max_length=255)  # The item to pick
-    article_id = models.PositiveIntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(100)],
-        unique=True
-    )
+    article_id = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
+    stock_quantity = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])  # The quantity available in stock
     
     def __str__(self):
-        return f"Picking for {self.order_spec.article} - {self.item_to_pick}, Quantity: {self.quantity}, Article ID: {self.article_id}"
+        return f"Picking {self.item_to_pick}, Article ID: {self.article_id}, {self.stock_quantity} in stock"
 
+class PickingList(models.Model):
+    orderspec = models.ForeignKey(OrderSpecs, on_delete=models.CASCADE, null=False, related_name='picking_lists')
+    picking = models.ForeignKey(Picking, on_delete=models.CASCADE, related_name='picking_lists')
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"Picking List for {self.orderspec}"
+    
 class LedMapping(models.Model):
     led_index = models.PositiveIntegerField(unique=True)
     article_id = models.PositiveIntegerField()

@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Customer, Order, OrderSpecs
 from .filters import OrderFilter, CustomerFilter
 from django.utils.translation import gettext as _
+from collections import defaultdict
 from .forms import *
 import subprocess
 
@@ -238,23 +239,38 @@ def enter_order_id(request):
             messages.error(request, _("Please enter a valid Order ID."))
     return render(request, 'enter_order_id.html') 
 
-def picking_list(request, order_id):
-    if request.user.is_authenticated:
-        order = get_object_or_404(Order, pk=order_id)
-        pickings = Picking.objects.filter(order_spec__order=order)
-        
-        context = {
-            'order': order,
-            'pickings': pickings,
-        }
+def picking_list(request, order_spec_id):
+    # Retrieve the specific OrderSpecs object
+    order_spec = get_object_or_404(OrderSpecs, pk=order_spec_id)
+    
+    # Get the associated order_id
+    order_id = order_spec.order.id
+    
+    # Fetch all related OrderSpecs for the given order_id
+    related_order_specs = OrderSpecs.objects.filter(order_id=order_id)
+    
+    # Fetch PickingList entries for these related OrderSpecs
+    picking_lists = PickingList.objects.filter(orderspec__in=related_order_specs)
+    
+    # Group PickingList entries by orderspec_id and include order_id in the context
+    grouped_pickings = defaultdict(list)
+    for picking_list in picking_lists:
+        grouped_pickings[picking_list.orderspec.id].append(picking_list)
+    
+    # Prepare the context
+    context = {
+        'order_spec': order_spec,                     # The specific OrderSpec being viewed
+        'order_id': order_id,                         # Associated order_id
+        'grouped_pickings': dict(grouped_pickings),   # Grouped picking lists by orderspec_id
+        'related_order_specs': related_order_specs,   # Related OrderSpecs for the same order_id
+    }
+    
+    # Render the picking_list template
+    return render(request, 'picking_list.html', context)
 
-        return render(request, 'picking_list.html', context)
-    else:
-        messages.error(request, _("You must be logged in to access the data"))
-        return redirect('home')
 
 def picking_iterator(request, order_id):
-    # Get the order
+    # Get the specific Order
     order = get_object_or_404(Order, pk=order_id)
 
     # Store the order_id in session for future use
@@ -262,30 +278,77 @@ def picking_iterator(request, order_id):
 
     # Initialize the picking list on the first load
     if 'picking_list' not in request.session:
-        # Get the picking list and store it in the session
-        pickings = list(Picking.objects.filter(order_spec__order=order).values('article_id','order_spec__article', 'item_to_pick', 'quantity'))
+        # Fetch all OrderSpecs related to the current order
+        related_order_specs = OrderSpecs.objects.filter(order=order)
 
-        request.session['picking_list'] = pickings
+        # Fetch PickingList entries for all related OrderSpecs
+        picking_lists = PickingList.objects.filter(orderspec__in=related_order_specs).select_related('picking')
+
+        if not picking_lists.exists():
+            messages.error(request, "No items found in the Picking List for this order.")
+            return redirect('home')
+
+        # Group PickingList entries by orderspec_id
+        grouped_pickings = defaultdict(list)
+        for picking_list in picking_lists:
+            grouped_pickings[picking_list.orderspec.id].append({
+                'picking_list': picking_list,
+                'picking': picking_list.picking,
+            })
+
+        # Store the grouped picking list in session
+        request.session['picking_list'] = {key: [
+            {
+                'id': entry['picking_list'].id,
+                'article_id': entry['picking'].article_id,
+                'item_to_pick': entry['picking'].item_to_pick,
+                'quantity': entry['picking_list'].quantity,
+                'stock_quantity': entry['picking'].stock_quantity,
+            }
+            for entry in entries
+        ] for key, entries in grouped_pickings.items()}
+
         request.session['current_index'] = 0  # Start at the first item
 
     # Get the current index and picking list from the session
     current_index = request.session['current_index']
     picking_list = request.session['picking_list']
-    
+
+    # Flatten the picking list for iteration
+    flat_picking_list = [
+        item for items in picking_list.values() for item in items
+    ]
 
     # Check if we still have items to iterate
-    if current_index < len(picking_list):
-        current_picking = picking_list[current_index]
+    if current_index < len(flat_picking_list):
+        current_picking = flat_picking_list[current_index]
 
-        article_id = int(current_picking['article_id'])
-        print('article_id (casted):', article_id)
-        
-        led_mapping = LedMapping.objects.filter(article_id=article_id)
-        print('Generated SQL:', led_mapping.query)
-        
-        led_mapping = led_mapping.first()
-        print('LedMapping object:', led_mapping)
-        
+        # Extract required fields
+        article_id = current_picking['article_id']
+        item_to_pick = current_picking['item_to_pick']
+        quantity = current_picking['quantity']
+        stock_quantity = current_picking['stock_quantity']
+
+        # Check stock quantity before proceeding
+        if stock_quantity < quantity:
+            messages.error(request, f"Insufficient stock for {item_to_pick}. Required: {quantity}, Available: {stock_quantity}")
+            request.session['current_index'] += 1
+            return redirect('picking_iterator', order_id=order_id)
+
+        # Reduce stock quantity
+        updated_stock_quantity = stock_quantity - quantity
+        current_picking['stock_quantity'] = updated_stock_quantity
+        flat_picking_list[current_index] = current_picking  # Update session data
+
+        # Update stock in the database
+        Picking.objects.filter(article_id=article_id).update(stock_quantity=updated_stock_quantity)
+
+        # Add warning message if stock quantity is below 15
+        if updated_stock_quantity < 15:
+            messages.warning(request, f"Warning: Stock for {item_to_pick} is low ({updated_stock_quantity} left).")
+
+        # Handle LED lighting
+        led_mapping = LedMapping.objects.filter(article_id=article_id).first()
         led_index = led_mapping.led_index if led_mapping else None
 
         if led_index is not None:
@@ -297,8 +360,8 @@ def picking_iterator(request, order_id):
         context = {
             'order': order,
             'picking': current_picking,
-            'last_item': current_index == len(picking_list) - 1,
-            'led_index': led_index,# Flag to check if it's the last item
+            'last_item': current_index == len(flat_picking_list) - 1,
+            'led_index': led_index,
         }
     else:
         # Clear the session if the list is finished
@@ -307,7 +370,7 @@ def picking_iterator(request, order_id):
         context = {
             'order': order,
             'finished': True,  # Flag to indicate the picking process is finished
-            'message': 'Picking List Completed'  # Message to show when finished
+            'message': 'Picking List Completed',  # Message to show when finished
         }
 
     return render(request, 'picking_iterator.html', context)
@@ -317,12 +380,62 @@ def next_picking(request):
     if 'current_index' in request.session:
         request.session['current_index'] += 1
 
-    # Get the order_id from the session or request
+    # Retrieve the order_id from the session
     order_id = request.session.get('order_id')
-    
+
     # Ensure the order_id is available for redirection
     if order_id:
+        # Redirect to picking_iterator using order_id
         return redirect('picking_iterator', order_id=order_id)
     else:
-        # If no order_id is found in session, handle the error (optional)
-        return redirect('home')  # or any fallback page
+        # Handle missing order_id in session
+        messages.error(request, "Order ID not found in session.")
+        return redirect('home')  # Fallback page if session data is missing
+    
+def add_picking_item(request):
+    if request.user.is_authenticated:
+        if request.user.username == "Vorgesetzter":
+            if request.method == 'POST':
+                Pickingitem = PickingItem(request.POST)
+                if Pickingitem.is_valid():
+                    Pickingitem = Pickingitem.save()
+                    messages.success(request, "Picking item added successfully!")
+                else:
+                    messages.error(request, "Please correct the errors in the form.")
+            else:
+                Pickingitem = PickingItem()
+            return render(request, 'add_picking_item.html', {'Pickingitem': Pickingitem})
+        else:
+            messages.error(request, _("Access denied! Only Vorgesetzter can add picking items."))
+            return redirect('enter_order_id')  # Replace with a more appropriate redirect if necessary
+    else:
+        messages.error(request, _("You must be logged in to add picking items."))
+        return redirect('home')
+
+def create_picking(request, order_spec_id):
+    if request.user.is_authenticated:
+        if request.user.username == "Vorgesetzter":
+            # Retrieve the specific OrderSpec
+            order_spec = get_object_or_404(OrderSpecs, pk=order_spec_id)
+
+            if request.method == 'POST':
+                Pickingform = PickingForm(request.POST)
+                if Pickingform.is_valid():
+                    print(Pickingform.cleaned_data)
+                    picking_list = Pickingform.save(commit=False)
+                    picking_list.orderspec = order_spec  # Associate with the specific OrderSpec
+                    picking_list.save()
+                    messages.success(request, _("Picking list item added successfully!"))
+                    return redirect('picking_list', order_spec_id=order_spec.id)
+                else:
+                    messages.error(request, _("Please correct the errors in the form."))
+            else:
+                Pickingform = PickingForm()
+
+            return render(request, 'create_picking.html', {'Pickingform': Pickingform, 'order_spec': order_spec})
+        else:
+            messages.error(request, _("Access denied! Only Vorgesetzter can create picking items."))
+            return redirect('home')  # Redirect to a suitable location
+    else:
+        messages.error(request, _("You must be logged in to create picking items."))
+        return redirect('home')

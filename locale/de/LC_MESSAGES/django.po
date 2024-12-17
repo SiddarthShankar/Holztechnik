@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-22 03:10+0200\n"
+"POT-Creation-Date: 2024-12-10 15:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,7 @@ msgid "Upload PDF"
 msgstr "PDF hochladen"
 
 #: website/forms.py:36 website/templates/order.html:31
+#: website/templates/picking_iterator.html:18
 msgid "Article"
 msgstr "Artikel"
 
@@ -101,6 +102,7 @@ msgid "Thickness (in meters)"
 msgstr "Dicke (Meter)"
 
 #: website/forms.py:42 website/templates/order.html:37
+#: website/templates/picking_list.html:17
 msgid "Quantity"
 msgstr "Menge"
 
@@ -109,6 +111,53 @@ msgstr "Menge"
 #| msgid "Price per meter (Euros)"
 msgid "Price Per Meter"
 msgstr "Preis pro Meter (Euro)"
+
+#: website/forms.py:64
+msgid "Enter quantity"
+msgstr "Menge eingeben"
+
+#: website/forms.py:67
+#, fuzzy
+#| msgid "Order Specifications"
+msgid "Order Specification"
+msgstr "Bestellspezifikationen"
+
+#: website/forms.py:68
+msgid "Picking Item"
+msgstr "Artikel auswählen"
+
+#: website/forms.py:69 website/templates/picking_iterator.html:19
+msgid "Quantity to Pick"
+msgstr "Zu entnehmende Menge"
+
+#: website/forms.py:75
+msgid "Enter item name"
+msgstr "Artikelnamen eingeben"
+
+#: website/forms.py:76 website/templates/picking_iterator.html:14
+#: website/templates/picking_list.html:16
+msgid "Item to Pick"
+msgstr "Zu wählender Artikel"
+
+#: website/forms.py:80
+msgid "Enter article ID"
+msgstr "Artikel-ID eingeben"
+
+#: website/forms.py:81 website/templates/picking_list.html:15
+msgid "Article ID"
+msgstr "Artikel ID"
+
+#: website/forms.py:85
+msgid "Stock quantity"
+msgstr "Lagermenge"
+
+#: website/forms.py:86
+msgid "Stock Quantity"
+msgstr "Lagermenge"
+
+#: website/forms.py:97
+msgid "Article ID must be unique."
+msgstr "Die Artikel-ID muss eindeutig sein."
 
 #: website/templates/about.html:6 website/templates/navbar.html:24
 msgid "About"
@@ -149,6 +198,22 @@ msgstr "Bestellungsdetails hinzufügen"
 #: website/templates/add_OrderSpecs.html:12
 msgid "Add Order Specifications"
 msgstr "Bestellspezifikationen hinzufügen"
+
+#: website/templates/add_picking_item.html:7
+#: website/templates/create_picking.html:11
+#: website/templates/add_picking_item.html:12
+msgid "Add picking item"
+msgstr "Kommissionierartikel hinzufügen"
+
+#: website/templates/create_picking.html:6
+#, fuzzy
+#| msgid "Article"
+msgid "Article:"
+msgstr "Artikel"
+
+#: website/templates/create_picking.html:12
+msgid "Finish Current OrderSpec"
+msgstr "Aktuelle Bestellspezifikation abschließen"
 
 #: website/templates/customer.html:6
 msgid "Customer Details"
@@ -198,7 +263,7 @@ msgstr "Einreichen"
 msgid "Customer Database"
 msgstr "Kundendatenbank"
 
-#: website/templates/home.html:13 website/templates/navbar.html:71
+#: website/templates/home.html:13 website/templates/navbar.html:72
 msgid "Search"
 msgstr "Suchen"
 
@@ -268,9 +333,77 @@ msgstr "Bestellspezifikationen hinzufügen"
 msgid "No order specifications available for this customer."
 msgstr "Für diesen Kunden sind keine Bestellspezifikationen verfügbar."
 
-#: website/templates/order.html:65
+#: website/templates/order.html:66
 msgid "Add Order Specs"
 msgstr "Bestellspezifikationen hinzufügen"
+
+#: website/templates/order.html:67
+msgid "Start Picking Process"
+msgstr "Kommissioniervorgang starten"
+
+#: website/templates/order.html:70
+msgid "Add New Picking Item"
+msgstr "Neues Kommissionierelement hinzufügen"
+
+#: website/templates/order.html:71
+msgid "Create Picking List"
+msgstr "Kommissionierliste erstellen"
+
+#: website/templates/order.html:72
+msgid "View Picking List"
+msgstr "Kommissionierliste anzeigen"
+
+#: website/templates/picking_iterator.html:8
+msgid "Picking for Order"
+msgstr "Kommissionieren auf Bestellung"
+
+#: website/templates/picking_iterator.html:15
+msgid "Stock Quantity Available"
+msgstr "Verfügbare Lagermenge"
+
+#: website/templates/picking_iterator.html:22
+msgid "LED Index"
+msgstr "LED-Index"
+
+#: website/templates/picking_iterator.html:24
+msgid "No LED Mapping Found"
+msgstr "Keine LED-Zuordnung gefunden"
+
+#: website/templates/picking_iterator.html:30
+msgid "Next"
+msgstr "Nächste"
+
+#: website/templates/picking_iterator.html:33
+msgid "Finish"
+msgstr "Beenden"
+
+#: website/templates/picking_iterator.html:42
+msgid "Picking List Completed!"
+msgstr "Kommissionierliste fertig!"
+
+#: website/templates/picking_iterator.html:43
+msgid "You have finished all the items in this order."
+msgstr "Sie haben alle Elemente dieser Bestellung fertiggestellt."
+
+#: website/templates/picking_list.html:4
+msgid "Picking List for Order"
+msgstr "Kommissionierliste für Bestellung"
+
+#: website/templates/picking_list.html:9
+msgid "Order Spec ID:"
+msgstr "Bestellspezifikations-ID:"
+
+#: website/templates/picking_list.html:18
+msgid "Stock Remaining"
+msgstr "Verbleibender Bestand"
+
+#: website/templates/picking_list.html:33
+msgid "No pickings available for this Order Spec ID."
+msgstr "Für diese Bestellspezifikations-ID sind keine Kommissionierungen verfügbar."
+
+#: website/templates/picking_list.html:37
+msgid "No pickings available for this order."
+msgstr "Für diese Bestellung sind keine Kommissionierungen verfügbar."
 
 #: website/templates/status.html:11
 msgid "Total Orders"
@@ -294,74 +427,98 @@ msgid "Update Order Details"
 msgstr "Bestelldetails aktualisieren"
 
 #: website/templates/update_OrderSpecs.html:7
+#: website/templates/update_OrderSpecs.html:12
 msgid "Update Order Specifications"
 msgstr "Bestellspezifikationen aktualisieren"
 
-#: website/views.py:35
+#: website/views.py:37
 msgid "You have been successfully logged in!"
 msgstr "Sie wurden erfolgreich angemeldet!"
 
-#: website/views.py:39
+#: website/views.py:41
 msgid "Please enter order_id..."
 msgstr "Bitte geben Sie die Bestellnummer ein."
 
-#: website/views.py:42
+#: website/views.py:44
 #, fuzzy
 #| msgid "An error occurred, please try again!"
 msgid "Invalid credentials, please try again."
 msgstr "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!"
 
-#: website/views.py:53
+#: website/views.py:55
 msgid "You have been successfully Logged Out!!...."
 msgstr "Sie wurden erfolgreich abgemeldet!!...."
 
-#: website/views.py:61 website/views.py:117 website/views.py:175
-#: website/views.py:189 website/views.py:206
+#: website/views.py:63 website/views.py:119 website/views.py:177
+#: website/views.py:191 website/views.py:208
 msgid "Access denied!!"
 msgstr "Zugriff verweigert!!"
 
-#: website/views.py:64 website/views.py:103 website/views.py:133
-#: website/views.py:192 website/views.py:209 website/views.py:222
+#: website/views.py:66 website/views.py:105 website/views.py:135
+#: website/views.py:194 website/views.py:211 website/views.py:224
 msgid "You must be logged into access the data"
 msgstr "Sie müssen angemeldet sein, um auf die Daten zugreifen zu können"
 
-#: website/views.py:93 website/views.py:146
+#: website/views.py:95 website/views.py:148
 msgid "You must be logged in to access the data"
 msgstr "Sie müssen eingeloggt sein um auf die Daten zugreifen zu können"
 
-#: website/views.py:100 website/views.py:186
+#: website/views.py:102 website/views.py:188
 msgid "Details have been deleted successfully!!.."
 msgstr "Details wurden erfolgreich gelöscht!!"
 
-#: website/views.py:113 website/views.py:155
+#: website/views.py:115 website/views.py:157
 msgid "Details added successfully!!..."
 msgstr "Details erfolgreich hinzugefügt!!..."
 
-#: website/views.py:120 website/views.py:159 website/views.py:178
+#: website/views.py:122 website/views.py:161 website/views.py:180
 msgid "You must be logged in to add a form"
 msgstr "Sie müssen angemeldet sein, um ein Formular hinzuzufügen"
 
-#: website/views.py:129 website/views.py:202 website/views.py:218
+#: website/views.py:131 website/views.py:204 website/views.py:220
 msgid "Details have been Updated successfully!!.."
 msgstr "Die Details wurden erfolgreich aktualisiert!!.."
 
-#: website/views.py:169
+#: website/views.py:171
 msgid "Specifications added successfully!!..."
 msgstr "Spezifikationen erfolgreich hinzugefügt!!..."
 
-#: website/views.py:235
+#: website/views.py:236
 msgid "Order ID does not exist."
 msgstr "Die Bestellnummer existiert nicht."
 
-#: website/views.py:238
+#: website/views.py:239
 msgid "Please enter a valid Order ID."
 msgstr "Bitte geben Sie eine gültige Bestellnummer ein."
+
+#: website/views.py:409
+msgid "Access denied! Only Vorgesetzter can add picking items."
+msgstr "Zugriff verweigert! Nur Vorgesetzte können Kommissionierartikel hinzufügen."
+
+#: website/views.py:412
+msgid "You must be logged in to add picking items."
+msgstr "Sie müssen angemeldet sein, um Kommissionierartikel hinzuzufügen."
+
+#: website/views.py:428
+msgid "Picking list item added successfully!"
+msgstr "Kommissionierlistenelement erfolgreich hinzugefügt!"
+
+#: website/views.py:431
+msgid "Please correct the errors in the form."
+msgstr "Bitte korrigieren Sie die Fehler im Formular."
+
+#: website/views.py:437
+msgid "Access denied! Only Vorgesetzter can create picking items."
+msgstr "Zugriff verweigert! Nur Vorgesetzte können Kommissionierartikel anlegen."
+
+#: website/views.py:440
+#, fuzzy
+#| msgid "You must be logged in to access the data"
+msgid "You must be logged in to create picking items."
+msgstr "Sie müssen eingeloggt sein um auf die Daten zugreifen zu können"
 
 #~ msgid "Order not found!"
 #~ msgstr "Bestellung nicht gefunden!"
 
 #~ msgid "Speak"
 #~ msgstr "Sprecher"
-
-#~ msgid "No orders available for this customer."
-#~ msgstr "Für diesen Kunden sind keine Bestellungen vorhanden."

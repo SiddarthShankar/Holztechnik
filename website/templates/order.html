@@ -61,9 +61,15 @@
       {% endif %}
       </tbody>
   </table>
+
   <div class="d-flex justify-content-end mt-3">
     <a href="{% url 'add_OrderSpecs' %}" class="btn btn-primary me-2">{% trans "Add Order Specs" %}</a>
     <a href="{% url 'picking_iterator' order.id %}" class="btn btn-success">{% trans "Start Picking Process" %}</a>
+  </div>
+  <div class="d-flex justify-content-start mb-3">
+    <a href="{% url 'add_picking_item' %}" class="btn btn-warning me-2">{% trans "Add New Picking Item" %}</a>
+    <a href="{% url 'create_picking' order.id %}" class="btn btn-warning me-2">{% trans "Create Picking List" %}</a>
+    <a href="{% url 'picking_list' order.id %}" class="btn btn-warning">{% trans "View Picking List" %}</a>
   </div>
 {% endif %}
 {% endblock %}

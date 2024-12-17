@@ -5,19 +5,32 @@
 
 {% if not finished %}
     <!-- Display the normal header for the picking process -->
-    <h1 class="text-center">{% trans "Picking for Order" %} #{{ order.id }}</h1>
+    <h3 class="text-center display-3">{% trans "Picking for Order" %} #{{ order.id }}</h3>
 
     <!-- Center and enlarge the picking details -->
     <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
         <div class="text-center">
-            <h2 class="lead display-4">{% trans "Article" %}: {{ picking.article }}</h2>
-            <p class="lead display-4">{% trans "Item to Pick" %}: {{ picking.item_to_pick }}</p>
-            <p class="lead display-4">{% trans "Quantity" %}: {{ picking.quantity }}</p>
+            <!-- Highlight the item name and stock quantity -->
+            <h5 class="display-3">
+                {% trans "Item to Pick" %}: <span style="color: green;">{{ picking.item_to_pick }}</span>
+            </h5>
+            <h5 class="display-3">
+                {% trans "Stock Quantity Available" %}: <span style="color: green;">{{ picking.stock_quantity }}</span>
+            </h5>
+            
+            <!-- Display other details with colored entries -->
+            <h5 class="display-3">
+                {% trans "Quantity to Pick" %}: <span style="color: green;">{{ picking.quantity }}</span>
+            </h5>
+            
             {% if led_index is not None %}
-                <p class="lead display-4 text-success">{% trans "LED Index" %}: {{ led_index }}</p>
+                <p class="lead">
+                    {% trans "LED Index" %}: <span style="color: green;">{{ led_index }}</span>
+                </p>
             {% else %}
-                <p class="lead display-4 text-danger">{% trans "No LED Mapping Found" %}</p>
+                <p class="lead text-danger">{% trans "No LED Mapping Found" %}</p>
             {% endif %}
+
             <br/>
             <div>
                 {% if not last_item %}

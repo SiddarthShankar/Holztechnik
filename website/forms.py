@@ -53,3 +53,46 @@ class OrderStatusForm(forms.ModelForm):
         widgets = {
             'status': forms.Select(attrs={'class': 'form-control'}),
         }
+
+class PickingForm(forms.ModelForm):
+    class Meta:
+        model = PickingList
+        fields = ['orderspec', 'picking', 'quantity']  # Use 'orderspec' instead of 'order_spec'
+        widgets = {
+            'orderspec': forms.Select(attrs={"class": "form-control"}),  # Match the field name
+            'picking': forms.Select(attrs={"class": "form-control"}),
+            'quantity': forms.NumberInput(attrs={"placeholder": _("Enter quantity"), "class": "form-control", "min": 1}),
+        }
+        labels = {
+            'orderspec': _("Order Specification"),  # Match the field name
+            'picking': _("Picking Item"),
+            'quantity': _("Quantity to Pick"),
+        }
+        
+class PickingItem(forms.ModelForm):
+    item_to_pick = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={"placeholder": _("Enter item name"), "class": "form-control"}),
+        label=_("Item to Pick")
+    )
+    article_id = forms.IntegerField(
+        required=True,
+        widget=forms.NumberInput(attrs={"placeholder": _("Enter article ID"), "class": "form-control", "min": 0}),
+        label=_("Article ID")
+    )
+    stock_quantity = forms.IntegerField(
+        required=True,
+        widget=forms.NumberInput(attrs={"placeholder": _("Stock quantity"), "class": "form-control", "min": 0}),
+        label=_("Stock Quantity")
+    )
+
+    class Meta:
+        model = Picking
+        fields = ['item_to_pick', 'article_id', 'stock_quantity']
+
+    def clean_article_id(self):
+        article_id = self.cleaned_data.get('article_id')
+        # Check for uniqueness of article_id
+        if Picking.objects.filter(article_id=article_id).exists():
+            raise forms.ValidationError(_("Article ID must be unique."))
+        return article_id

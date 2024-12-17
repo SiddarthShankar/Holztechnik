@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<div class="col-md-6 offset-md-3">
+<h1 class="text-center">{% trans "Add Picking Item" %}</h1>
+<br/>
+<form method="POST">
+    {% csrf_token %}
+    {{ Pickingitem.as_p }} <br/>
+    <button type="submit" class="btn btn-primary">{% trans "Add picking item" %}</button>
+</form>
+</div>
+
+{% endblock %}

@@ -1,27 +1,40 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load static %}
 {% block content %}
-<h1 class="text-center">{% trans "Picking List for Order" %}</h1>
+<h1 class="text-center">{% trans "Picking List for Order" %} {{ order.id }}</h1>
 <br/>
 
-<div style="margin-top: 20px;">
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-          <tr>
-            <th>{% trans "Article" %}</th>
-            <th>{% trans "Item to Pick" %}</th>
-            <th>{% trans "Quantity" %}</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% if pickings %}
-            {% for picking in pickings %}
-            <tr>
-                <td>{{ picking.order_spec.article }}</td>
-                <td>{{ picking.item_to_pick }}</td>
-                <td>{{ picking.quantity }}</td>
-            </tr>
-            {% endfor %}
-        {% endif %}
+{% if grouped_pickings %}
+{% for order_spec_id, items in grouped_pickings.items %}
+<h2>{% trans "Order Spec ID:" %} {{ order_spec_id }}</h2>
+
+{% if items %}
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>{% trans "Article ID" %}</th>
+        <th>{% trans "Item to Pick" %}</th>
+        <th>{% trans "Quantity" %}</th>
+        <th>{% trans "Stock Remaining" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in items %}
+        <tr>
+          <td>{{ entry.picking.article_id }}</td>
+          <td>{{ entry.picking.item_to_pick }}</td>
+          <td>{{ entry.picking_list.quantity }}</td>
+          <td>{{ entry.picking.stock_quantity }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>{% trans "No pickings available for this Order Spec ID." %}</p>
+{% endif %}
+{% endfor %}
+{% else %}
+  <p class="text-center">{% trans "No pickings available for this order." %}</p>
+{% endif %}
+
 {% endblock %}

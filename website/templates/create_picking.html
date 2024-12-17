@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="col-md-6 offset-md-3">
+<h1>{% trans "Article:" %} {{ current_order_spec.article }}</h1>
+<form method="post" class="form-container">
+    {% csrf_token %}
+    {{ Pickingform.as_p }}
+    <div class="d-flex justify-content-between">
+        <button type="submit" name="add" class="btn btn-primary">{% trans "Add Picking Item" %}</button>
+        <button type="submit" name="finish" class="btn btn-success">{% trans "Finish Current OrderSpec" %}</button>
+    </div>
+</form>
+</div>
+{% endblock %}

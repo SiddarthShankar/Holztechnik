@@ -22,7 +22,9 @@ urlpatterns = [
     path('update_OrderDetails/<int:pk>', views.update_OrderDetails, name='update_OrderDetails'),
     path('update_OrderSpecs/<int:pk>', views.update_OrderSpecs, name='update_OrderSpecs'),
     path('enter_order_id/', views.enter_order_id, name='enter_order_id'),
-    path('pickings/<int:order_id>/', views.picking_list, name='picking_list'),
+    path('picking_list/<int:order_spec_id>/', views.picking_list, name='picking_list'),
     path('picking_iterator/<int:order_id>/', views.picking_iterator, name='picking_iterator'),
     path('next-picking/', views.next_picking, name='next_picking'),
+    path('add-picking-item/', views.add_picking_item, name='add_picking_item'),
+    path('create-picking/<int:order_spec_id>/', views.create_picking, name='create_picking'),
 ]
